@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+
 <head>
-  <title><?= $this->config->item('app_name') ?> </title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
-  <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-  <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
+    <!-- Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title><?= $this->config->item('app_name') ?> </title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
+    <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
+
+    <!-- Scripts -->
+    <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
+
+    <!-- Inline Script -->
+    <script>
+        function formatar(mascara, documento) {
+            var i = documento.value.length;
+            var saida = mascara.substring(0, 1);
+            var texto = mascara.substring(i)
+
+            if (texto.substring(0, 1) != saida) {
+                documento.value += texto.substring(0, 1);
+            }
+        }
+    </script>
 </head>
+
+<?php
+$parse_email = $this->input->get('e');
+$parse_cpfcnpj = $this->input->get('c');
+?>
+
 
 <body>
   <div class="main-login">
@@ -37,6 +70,7 @@
       <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
       <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
     </div>
+    
     <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
       <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
       <?php if ($this->session->flashdata('error') != null) { ?>
@@ -61,21 +95,133 @@
                   </div>
                 </div>
                 <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
-                <div class="input-field">
-                  <label class="fas fa-user" for="nome"></label>
-                  <input id="email" name="email" type="text" placeholder="Email">
-                </div>
-                <div class="input-field">
-                  <label class="fas fa-lock" for="senha"></label>
-                  <input name="senha" type="password" placeholder="Senha">
-                </div>
-                <div class="center">
-                  <button id="btn-acessar">Acessar</button>
-                </div>
-                <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                    <p><?= date('Y'); ?> &copy; Ramon Silva</p>
-                  </a>
-                </div>
+                <head>
+                    
+                                <title></title>
+                                <style>
+                                    body {
+                                        font-family: Arial, sans-serif;
+                                    }
+                                    .tabs {
+                                        display: flex;
+                                    }
+                                    .tab {
+                                        flex: 1;
+                                        padding: 10px;
+                                        text-align: center;
+                                        background-color: #F8F8FF;
+                                        border: 1px solid #FF6347;
+                                        cursor: pointer;
+                                    }
+                                    .tab.active {
+                                        background-color: #fd5e33;
+                                    }
+                                    .form-container {
+                                        border: 1px solid #FF6347;
+                                        padding: 20px;
+                                    }
+                                </style>
+                            </head>
+                      </html>
+
+                      <body>
+                                <div class="tabs" style="">
+                                    <div class="tab" id="loginAdmin">EMPRESA</div>
+                                    <div class="tab" id="loginCliente">CLIENTE</div>
+                                </div>
+
+                                <div class="form-container" id="loginForm">
+
+                                    <form method="post" action="index.html">
+                                        <div class="input-field">
+                                            <label class="fas fa-user" for="nome"></label>
+                                            <input id="email" name="email" type="text" placeholder="Email">
+                                        </div>
+
+                                        <div class="input-field">
+                                            <label class="fas fa-lock" for="senha"></label>
+                                            <input name="senha" type="password" placeholder="Senha">
+                                        </div>
+
+                                        <div class="center"><button id="btn-acessar">Acessar</button>
+                                        </div>
+
+                                        <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
+                                                <p><?= date('Y'); ?> &copy; Ramon Silva</p>
+                                            </a></div>
+                                    </form>
+                                </div>
+
+                                <div class="form-container" style="display: none;">
+
+                                    <form method="post" id="formLoginCliente" method="post"
+                                        action="<?php echo site_url() ?>/mine/login">
+                                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <div class="main_input_box">
+                                                    <span class="add-on bg_lg"><i
+                                                            class='bx bx-user-plus iconU'></i></span>
+                                                    <input id="email" name="email" type="text" placeholder="Email"value="<?php echo trim($parse_email); ?>" />
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <div class="main_input_box">
+                                                    <span class="add-on bg_ly"><i
+                                                            class='bx bx-id-card iconU'></i></span>
+                                                    <input class="" maxlength="18" size="18" name="senha"
+                                                        type="password" placeholder="Senha" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
+                                        <div style="padding: 10px;"></div>
+
+                                        <div class="links-uteis"><a href="<?= site_url('mine/resetarSenha') ?>">
+                                                <p style="margin:0px 0 18px">Esqueceu a senha?</p>
+                                            </a></div>
+                                        <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
+                                                <p><?= date('Y'); ?> &copy; Ramon Silva</p>
+                                            </a></div>
+
+                                    </form>
+                                </div>
+
+                                <script>
+                                    // Função para alternar entre as abas
+                                    function changeTab(tabId) {
+                                        const tabs = document.querySelectorAll(".tab");
+                                        const forms = document.querySelectorAll(".form-container");
+
+                                        tabs.forEach(tab => tab.classList.remove("active"));
+                                        document.getElementById(tabId).classList.add("active");
+
+                                        if (tabId === "loginAdmin") {
+                                            forms[0].style.display = "block";
+                                            forms[1].style.display = "none";
+                                        } else if (tabId === "loginCliente") {
+                                            forms[0].style.display = "none";
+                                            forms[1].style.display = "block";
+                                        }
+                                    }
+
+                                    // Adiciona um ouvinte de eventos às abas
+                                    document.getElementById("loginAdmin").addEventListener("click", () => changeTab(
+                                        "loginAdmin"));
+                                    document.getElementById("loginCliente").addEventListener("click", () => changeTab(
+                                        "loginCliente"));
+                                </script>
+                            </body>
+
+                
+                
+                
                 <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
                 <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="modal-header">
@@ -175,6 +321,105 @@
       });
     });
   </script>
+       <!-- #alteração -->
+
+       <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+        <?php if ($this->session->flashdata('success') != null) { ?>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: '<?php echo $this->session->flashdata('success'); ?>',
+                    showConfirmButton: false,
+                    timer: 4000
+                })
+            </script>
+        <?php } ?>
+
+        <?php if ($this->session->flashdata('error') != null) { ?>
+            <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: '<?php echo $this->session->flashdata('error'); ?>',
+                    showConfirmButton: false,
+                    timer: 4000
+                })
+            </script>
+        <?php } ?>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#formLoginCliente").validate({
+                    rules: {
+                        email: {
+                            required: true,
+                            email: true
+                        },
+                        senha: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        email: {
+                            required: 'Campo Requerido.',
+                            email: 'Insira Email válido'
+                        },
+                        senha: {
+                            required: 'Campo Requerido.'
+                        }
+                    },
+                    submitHandler: function (form) {
+                        var dados = $(form).serialize();
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: "<?php echo base_url(); ?>index.php/mine/login?ajax=true",
+                            data: dados,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.result == true) {
+                                    window.location.href =
+                                        "<?php echo base_url(); ?>index.php/mine/painel";
+                                } else {
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'error',
+                                        title: 'Os dados de acesso estão incorretos.\n Por favor tente novamente!',
+                                        showConfirmButton: false,
+                                        timer: 4000
+                                    })
+                                }
+                            }
+                        });
+
+                        return false;
+                    },
+
+                    errorClass: "help-inline",
+                    errorElement: "span",
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).parents('.control-group').addClass('error');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).parents('.control-group').removeClass('error');
+                        $(element).parents('.control-group').addClass('success');
+                    }
+                });
+
+            });
+        </script>
+
+
+
+
+
+
+
 </body>
 
 </html>

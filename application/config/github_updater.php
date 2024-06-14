@@ -17,7 +17,7 @@ $config['github_repo'] = 'maposmod';
 /**
  * The branch to update from
  */
-$config['github_branch'] = 'master';
+$config['github_branch'] = 'main';
 
 /**
  * The current commit the files are on.
