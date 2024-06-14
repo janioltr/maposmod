@@ -153,6 +153,47 @@ class Mapos extends MY_Controller
         }
     }
 
+    // upload carimbo
+
+    public function do_uploadCarimbo($filename = null)
+ {
+    if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+        redirect(base_url());
+    }
+
+    $this->load->library('upload');
+
+    $image_upload_folder = FCPATH . 'assets/img/carimbo';
+
+    if (!file_exists($image_upload_folder)) {
+        mkdir($image_upload_folder, DIR_WRITE_MODE, true);
+    }
+
+    $this->upload_config = [
+        'upload_path' => $image_upload_folder,
+        'allowed_types' => 'png|jpg|jpeg|bmp|svg',
+        'max_size' => 2048,
+        'remove_space' => true,
+        'file_name' => $filename, // Adicione esta linha
+    ];
+
+    $this->upload->initialize($this->upload_config);
+
+    if (!$this->upload->do_upload()) {
+        $upload_error = $this->upload->display_errors();
+        print_r($upload_error);
+        exit();
+    } else {
+        $file_info = [$this->upload->data()];
+        return $file_info[0]['file_name'];
+    }
+}
+
+
+
+
+
     public function do_upload_user()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
@@ -313,6 +354,37 @@ class Mapos extends MY_Controller
         }
         redirect(site_url('mapos/emitente'));
     }
+
+    // editar carimbo
+
+    public function editarCarimbo()
+{
+    if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+        redirect(base_url());
+    }
+
+    $id = $this->input->post('id');
+    if ($id == null || !is_numeric($id)) {
+        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
+        redirect(site_url('mapos/emitente'));
+    }
+    $this->load->helper('file');
+    delete_files(FCPATH . 'assets/img/carimbo/');
+
+    // Chame a função do_upload aqui e certifique-se de que ela está configurada para salvar o arquivo como "carimbo.png"
+    $imageCarim = $this->do_uploadCarimbo('carimbo.png');
+    $carimbo = base_url() . 'assets/img/carimbo/' . $imageCarim;
+
+    $retorno = $this->mapos_model->editCarimbo($id, $carimbo);
+    if ($retorno) {
+        $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
+        log_info('Alterou o Carimbo do emitente.');
+    } else {
+        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
+    }
+    redirect(site_url('mapos/emitente'));
+}
 
     public function uploadUserImage()
     {
