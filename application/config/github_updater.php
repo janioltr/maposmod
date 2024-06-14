@@ -7,12 +7,12 @@ if (! defined('BASEPATH')) {
 /**
  * The user name of the git hub user who owns the repo
  */
-$config['github_user'] = 'RamonSilva20';
+$config['github_user'] = 'janioltr';
 
 /**
  * The repo on GitHub we will be updating from
  */
-$config['github_repo'] = 'mapos';
+$config['github_repo'] = 'maposmod';
 
 /**
  * The branch to update from
@@ -25,7 +25,7 @@ $config['github_branch'] = 'master';
  * NOTE: You should only need to set this initially it will be
  * automatically set by the library after subsequent updates.
  */
-$config['current_commit'] = '53d35385917658bab3e048622325429d993f00de';
+$config['current_commit'] = 'd28357501f36828d2dfdbb05acccb7f683bf3ad0';
 
 /**
  * A list of files or folders to never perform an update on.
