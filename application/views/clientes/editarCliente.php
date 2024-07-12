@@ -91,13 +91,15 @@
             <form action="<?php echo current_url(); ?>" id="formCliente" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <div class="span6">
-                        <div class="control-group">
-                            <label for="documento" class="control-label">CPF/CNPJ</label>
-                            <div class="controls">
-                                <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
-                                <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar(CNPJ)</button>
-                            </div>
-                        </div>
+                    <div class="control-group">
+                    <label for="documento" class="control-label">CPF/CNPJ</label>
+                    <div class="controls">
+                        <input id="documento" class="cpfcnpj" type="text" name="documento" value="<?php echo $result->documento; ?>" />
+                        <button id="buscar_info_cnpj" class="btn btn-xs" type="button">Buscar(CNPJ)</button>
+                    </div>
+                </div>
+
+                        
                         <div class="control-group">
                             <?php echo form_hidden('idClientes', $result->idClientes) ?>
                             <label for="nomeCliente" class="control-label">Nome/Razão Social<span class="required">*</span></label>
@@ -105,7 +107,7 @@
                                 <input id="nomeCliente" type="text" name="nomeCliente" value="<?php echo $result->nomeCliente; ?>" />
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group" id="contato-group" style="display: none;">
                             <label for="contato" class="control-label">Contato:</label>
                             <div class="controls">
                                 <input class="contato" type="text" name="contato" value="<?php echo $result->contato; ?>" />
@@ -257,5 +259,30 @@
                 $(element).parents('.control-group').addClass('success');
             }
         });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var documentoValue = document.getElementById('documento').value;
+        var contatoGroup = document.getElementById('contato-group');
+        
+        if (documentoValue.length > 14) {
+            contatoGroup.style.display = 'block';
+        } else {
+            contatoGroup.style.display = 'none';
+        }
+    });
+
+    document.getElementById('documento').addEventListener('input', function() {
+        var documentoValue = this.value;
+        var contatoGroup = document.getElementById('contato-group');
+        
+        if (documentoValue.length > 14) {
+            contatoGroup.style.display = 'block';
+        } else {
+            contatoGroup.style.display = 'none';
+        }
     });
 </script>
