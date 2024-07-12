@@ -1,15 +1,12 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/trumbowyg/ui/trumbowyg.css">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/trumbowyg/trumbowyg.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/trumbowyg/langs/pt_br.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
-
-
-
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
         <div class="widget-box">
@@ -31,8 +28,7 @@
                                         incompletos, verifique os campos com asterisco ou se selecionou corretamente
                                         cliente, responsável e garantia.<br />Ou se tem um cliente e um termo de garantia
                                         cadastrado.</div>
-                                    <?php
-                                } ?>
+                                    <?php } ?>
                                 <form action="<?php echo current_url(); ?>" method="post" id="formOs">
                                     <div class="span12" style="padding: 1%">
                                         <div class="span5">
@@ -45,9 +41,13 @@
                                             <label for="tecnico">Técnico / Responsável<span
                                                     class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico"
-                                                value="<?= $this->session->userdata('nome_admin'); ?>" />
+                                                value="<?= $this->session->userdata(
+                                                    "nome_admin"
+                                                ) ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id"
-                                                value="<?= $this->session->userdata('id_admin'); ?>" />
+                                                value="<?= $this->session->userdata(
+                                                    "id_admin"
+                                                ) ?>" />
                                         </div>
 
                                         <div class="span3">
@@ -69,7 +69,9 @@
                                         <div class="span3">
                                             <label for="dataInicial">Data Inicial<span class="required">*</span></label>
                                             <input id="dataInicial" autocomplete="off" class="span12 datepicker"
-                                                type="text" name="dataInicial" value="<?php echo date('d/m/Y'); ?>" />
+                                                type="text" name="dataInicial" value="<?php echo date(
+                                                    "d/m/Y"
+                                                ); ?>" />
                                         </div>
 
 
@@ -83,7 +85,9 @@
                                             <label for="garantia">Garantia (dias)</label>
                                             <input id="garantia" type="number" placeholder="Status s/g inserir nº/0"
                                                 min="0" max="9999" class="span12" name="garantia" value="" />
-                                            <?php echo form_error('garantia'); ?>
+                                            <?php echo form_error(
+                                                "garantia"
+                                            ); ?>
                                         </div>
 
                                         <div class="span3">
@@ -106,33 +110,28 @@
 
                                         </div>
 
-                                        <div class="span2">
+                                        <div class="span3">
                                             <label for="marcaProdutoOs">MARCA</label>
                                             <input name="marcaProdutoOs" class="span12" type="text" id="marcaProdutoOs"
                                                 value="" onChange="javascript:this.value=this.value.toUpperCase();"/> 
 
                                         </div>
 
-                                        <div class="span2">
+                                        <div class="span3">
                                             <label for="modeloProdutoOs">MODELO</label>
                                             <input name="modeloProdutoOs" class="span12" type="text"
                                                 id="modeloProdutoOs" value="" onChange="javascript:this.value=this.value.toUpperCase();"/>
 
                                         </div>
 
-                                        <div class="span2">
+                                        <div class="span3">
                                             <label for="nsProdutoOs">NÚMERO DE SÉRIE</label>
                                             <input name="nsProdutoOs" class="span12" type="text" id="nsProdutoOs"
                                                 value="" onChange="javascript:this.value=this.value.toUpperCase();"/>
 
                                         </div>
 
-                                        <div class="span3">
-                                            <label for="ucProdutoOs">UNIDADE CONSUMIDORA</label>
-                                            <input name="ucProdutoOs" class="span12" type="text" id="ucProdutoOs"
-                                                value="" onChange="javascript:this.value=this.value.toUpperCase();"/>
-
-                                        </div>
+                                        
 
                                       
 
@@ -140,48 +139,45 @@
 
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
+                                        
+                                        <div class="span4">
+                                            <label for="localizacaoProdutoOs">LOCALIZAÇÃO</label>
+                                            <input name="localizacaoProdutoOs" class="span12" type="text" id="localizacaoProdutoOs"
+                                                value="" onChange="javascript:this.value=this.value.toUpperCase();"/>
 
-                                        <div class="span6">
+                                        </div>
+
+                                        <div class="span4">
                                             <label for="defeito">Defeito reclamado pelo cliente</label>
                                             <input name="defeito" class="span12" type="text" id="defeito" value="" />
 
                                         </div>
 
-                                        <div class="span6">
+                                        <div class="span4">
                                             <label for="analiseBasica">Defeito constatado em pré-análise</label>
                                             <input name="analiseBasica" class="span12" type="text" id="analiseBasica" value="" />
 
                                         </div>
+
+                                        
 
                                     </div>
 
 
                                     <div class="span12" style="padding: 1%; margin-left: 0">
 
-                                        <div class="span6">
-                                            <label for="observacoes">
-                                                <strong>OBSERVAÇÕES</strong>
-                                            </label>
-                                            <textarea class="span12 editor" name="observacoes" id="observacoes"
-                                                cols="30" rows="5"></textarea>
-                                        </div>
-                                        <div class="span6">
-                                            <label for="laudoTecnico">
-                                                <strong>LAUDO TÉCNICO</strong>
-                                            </label>
-                                            <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico"
-                                                cols="30" rows="5"></textarea>
-                                        </div>
+                                        
 
                                     </div>
 
+                                    
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="display:flex">
                                             <button class="button btn btn-success" id="btnContinuar">
                                                 <span class="button__icon"><i
                                                         class='bx bx-chevrons-right'></i></span><span
                                                     class="button__text2">Continuar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/os"
+                                            <a href="<?php echo base_url(); ?>index.php/os"
                                                 class="button btn btn-mini btn-warning" style="max-width: 160px">
                                                 <span class="button__icon"><i class="bx bx-undo"></i></span><span
                                                     class="button__text2">Voltar</span></a>

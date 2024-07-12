@@ -39,13 +39,11 @@
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
-                        <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
-                        <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra" value="<?php echo $result->codDeBarra; ?>" />
-                        </div>
+                        <?php echo form_hidden('idModelo', $result->idModelo) ?>
+                        
                     </div>
                     <div class="control-group">
-                        <label for="descricao" class="control-label">Descrição<span class="required">*</span></label>
+                        <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
@@ -57,18 +55,30 @@
                             <input id="marcaProduto" type="text" name="marcaProduto" value="<?php echo $result->marcaProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
-
                     <div class="control-group">
-                        <label for="modeloProduto" class="control-label">Modelo<span class="required">*</span></label>
+                        <label for="nomeModelo" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
-                            <input id="modeloProduto" type="text" name="modeloProduto" value="<?php echo $result->modeloProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
+                            <input id="nomeModelo" type="text" name="nomeModelo" value="<?php echo $result->nomeModelo; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
-
                     <div class="control-group">
                         <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
                         <div class="controls">
                             <input id="nsProduto" type="text" name="nsProduto" value="<?php echo $result->nsProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="codigoPeca" class="control-label">Codigo da Peça<span class=""></span></label>
+                        <div class="controls">
+                            <input id="codigoPeca" type="text" name="codigoPeca" value="<?php echo $result->codigoPeca; ?>" onChange="javascript:this.value=this.value.toUpperCase();"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="localizacaoProduto" class="control-label">Localização<span class=""></span></label>
+                        <div class="controls">
+                            <input id="localizacaoProduto" type="text" name="localizacaoProduto" value="<?php echo $result->localizacaoProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();"/>
                         </div>
                     </div>
 

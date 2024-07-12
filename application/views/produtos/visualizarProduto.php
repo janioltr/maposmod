@@ -35,7 +35,7 @@
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Modelo</strong></td>
                             <td>
-                                <?php echo $result->modeloProduto ?>
+                                <?php echo $result->nomeModelo ?>
                             </td>
                         </tr>
 

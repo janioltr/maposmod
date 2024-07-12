@@ -2,8 +2,6 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-
-
 -- -----------------------------------------------------
 -- Table `ci_sessions`
 -- -----------------------------------------------------
@@ -14,7 +12,6 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
         `data` blob NOT NULL,
         KEY `ci_sessions_timestamp` (`timestamp`)
 );
-
 
 -- -----------------------------------------------------
 -- Table `clientes`
@@ -68,7 +65,6 @@ CREATE TABLE IF NOT EXISTS `categorias` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
 -- -----------------------------------------------------
 -- Table `contas`
 -- -----------------------------------------------------
@@ -97,7 +93,6 @@ CREATE TABLE IF NOT EXISTS `permissoes` (
   PRIMARY KEY (`idPermissao`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `usuarios`
@@ -132,8 +127,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
-
 
 -- -----------------------------------------------------
 -- Table `lancamentos`
@@ -186,7 +179,6 @@ CREATE TABLE IF NOT EXISTS `lancamentos` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
 -- -----------------------------------------------------
 -- Table `forma_pagamento`
 -- -----------------------------------------------------
@@ -199,7 +191,6 @@ CREATE TABLE IF NOT EXISTS `forma_pagamento` (
   `ativa` BOOLEAN,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `carteira_usuario`
@@ -217,8 +208,6 @@ CREATE TABLE IF NOT EXISTS `carteira_usuario` (
     REFERENCES `usuarios` (`idUsuarios`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
-
 -- -----------------------------------------------------
 -- Table `retiradas`
 -- -----------------------------------------------------
@@ -232,8 +221,6 @@ CREATE TABLE IF NOT EXISTS `retiradas` (
   PRIMARY KEY (`id_retirada`),
   FOREIGN KEY (`id_usuario`) REFERENCES carteira_usuario(id_usuario)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
-
 
 -- -----------------------------------------------------
 -- Table `Garantia`
@@ -308,9 +295,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
-
-
 -- -----------------------------------------------------
 -- Table `status_os`
 -- -----------------------------------------------------
@@ -321,7 +305,6 @@ CREATE TABLE IF NOT EXISTS `status_os` (
     `ativa` BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (id)
 )ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `usuario_status_os`
@@ -334,7 +317,6 @@ CREATE TABLE IF NOT EXISTS `usuario_status_os` (
     PRIMARY KEY (`status_id`, `usuario_id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
 -- -----------------------------------------------------
 -- Table `produtos`
 -- -----------------------------------------------------
@@ -343,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `codDeBarra` VARCHAR(70) NOT NULL,
   `descricao` VARCHAR(80) NOT NULL,
   `marcaProduto` VARCHAR(80) NOT NULL,
-  `modeloProduto` VARCHAR(80) NOT NULL,
+  `idModelo` INT(11) NOT NULL,
   `codigoPeca` VARCHAR(80) NOT NULL,
   `nsProduto` VARCHAR(80) NOT NULL,
   `localizacaoProduto` VARCHAR(80) NULL,
@@ -352,11 +334,39 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `precoVenda` DECIMAL(10,2) NOT NULL,
   `estoque` INT(11) NOT NULL,
   `estoqueMinimo` INT(11) NULL DEFAULT NULL,
-  `saida`	TINYINT(1) NULL DEFAULT NULL,
-  `entrada`	TINYINT(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`idProdutos`))
+  `saida` TINYINT(1) NULL DEFAULT NULL,
+  `entrada` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`idProdutos`),
+  FOREIGN KEY (`idModelo`) REFERENCES `modelo`(`idModelo`)
+)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table `modelo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `modelo` (
+    `idModelo` INT(11) NOT NULL AUTO_INCREMENT,
+    `nomeModelo` VARCHAR(80) NOT NULL,
+    PRIMARY KEY (`idModelo`)
+)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table `compativeis`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `compativeis` (
+  `idProduto` INT(11) NOT NULL,
+  `idModeloCompativel` INT(11) NOT NULL,
+  `modeloCompativel` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`idProduto`, `idModeloCompativel`),
+  FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`) ON DELETE CASCADE,
+  FOREIGN KEY (`idModeloCompativel`) REFERENCES `modelo`(`idModelo`) ON DELETE CASCADE
+)
+ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
@@ -367,17 +377,6 @@ CREATE TABLE IF NOT EXISTS `imagens_produto` (
   `idProduto` INT(11) NOT NULL,
   `urlImagem` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idImagem`),
-  FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
--- -----------------------------------------------------
--- Table `compativeis`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `compativeis` (
-  `idcompativeis` INT(11) NOT NULL AUTO_INCREMENT,
-  `idProduto` INT(11) NOT NULL,
-  `compativeis` VARCHAR(80) NOT NULL,
-  PRIMARY KEY (`idcompativeis`),
   FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -414,7 +413,6 @@ CREATE TABLE IF NOT EXISTS `produtos_os` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
 -- -----------------------------------------------------
 -- Table `servicos`
 -- -----------------------------------------------------
@@ -427,7 +425,6 @@ CREATE TABLE IF NOT EXISTS `servicos` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `servicos_os`
@@ -455,7 +452,6 @@ CREATE TABLE IF NOT EXISTS `servicos_os` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `vendas`
@@ -497,7 +493,6 @@ CREATE TABLE IF NOT EXISTS `vendas` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 --
 -- Estrutura da tabela `cobrancas`
@@ -578,7 +573,6 @@ CREATE TABLE IF NOT EXISTS `anexos` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-
 
 -- -----------------------------------------------------
 -- Table `documentos`
@@ -777,3 +771,5 @@ INSERT IGNORE INTO `migrations`(`version`) VALUES ('20210125173741');
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+

@@ -27,8 +27,7 @@
             <thead>
             <tr>
                 <th>Cod.</th>
-                <th>Cod. Barra</th>
-                <th>Nome</th>
+                <th>Produto</th>
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Estoque</th>
@@ -47,10 +46,9 @@
             foreach ($results as $r) {
                 echo '<tr>';
                 echo '<td>' . $r->idProdutos . '</td>';
-                echo '<td>' . $r->codDeBarra . '</td>';
                 echo '<td>' . $r->descricao . '</td>';
                 echo '<td>' . $r->marcaProduto . '</td>';
-                echo '<td>' . $r->modeloProduto . '</td>';
+                echo '<td>' . $r->nomeModelo . '</td>'; // Exibe o nome do modelo
                 echo '<td>' . $r->estoque . '</td>';
                 echo '<td>' . number_format($r->precoVenda, 2, ',', '.') . '</td>';
                 echo '<td>';

@@ -37,13 +37,7 @@
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                    <div class="control-group">
-                        <label for="codDeBarra" class="control-label">Código Barra<span class=""></span></label>
-                        <div class="controls">
-                            <input id="codDeBarra" type="text" name="codDeBarra"
-                                value="<?php echo set_value('codDeBarra'); ?>" />
-                        </div>
-                    </div>
+                    
                     <div class="control-group">
                         <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
                         <div class="controls">
@@ -60,6 +54,8 @@
                                 onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
+
+
                     <div class="control-group">
                         <label for="modeloProduto" class="control-label">Modelo<span class="required">*</span></label>
                         <div class="controls">
@@ -68,6 +64,29 @@
                                 onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        
+                    </div>
+
+                    <div class="control-group">
+                        <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="codigoPeca" type="text" name="codigoPeca"
+                                value="<?php echo set_value('codigoPeca'); ?>"
+                                onChange="javascript:this.value=this.value.toUpperCase();" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="localizacaoProduto" type="text" name="localizacaoProduto"
+                                value="<?php echo set_value('localizacaoProduto'); ?>"
+                                onChange="javascript:this.value=this.value.toUpperCase();" />
+                        </div>
+                    </div>
+
                     <div class="control-group">
                         <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
                         <div class="controls">
@@ -90,7 +109,6 @@
                         </div>
                     </div>
 
-
                     <div class="control-group">
                         <label for="precoCompra" class="control-label">Preço de Compra<span
                                 class="required">*</span></label>
@@ -103,7 +121,6 @@
                             <strong><span style="color: red" id="errorAlert"></span><strong>
                         </div>
                     </div>
-
 
                     <div class="control-group">
                         <label for="precoVenda" class="control-label">Preço de Venda<span
@@ -140,7 +157,11 @@
                                 <button type="submit" class="button btn btn-mini btn-success"
                                     style="max-width: 160px"><span class="button__icon"><i
                                             class='bx bx-plus-circle'></i></span><span
-                                        class="button__text2">Adicionar</span></button>
+                                        class="button__text2">Adicionar</span>
+
+                                        
+                                    
+                                    </button>
                                 <a href="<?php echo base_url() ?>index.php/produtos" id=""
                                     class="button btn btn-mini btn-warning"><span class="button__icon"><i
                                             class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
@@ -199,6 +220,26 @@ $('#precoVenda').focusout(function() {
     }
 
 });
+
+
+// função de modelos compativeis // 
+function addInput() {
+    var inputArea = document.getElementById('inputArea');
+    var newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.name = 'compativeis';
+    newInput.onchange = function() { this.value = this.value.toUpperCase(); };
+    inputArea.appendChild(newInput);
+};
+
+
+
+
+
+
+
+
+
 
 $(document).ready(function() {
     $(".money").maskMoney();

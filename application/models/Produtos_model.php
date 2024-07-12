@@ -30,11 +30,15 @@ class Produtos_model extends CI_Model
     }
 
     public function getById($id)
-    {
-        $this->db->where('idProdutos', $id);
-        $this->db->limit(1);
-        return $this->db->get('produtos')->row();
-    }
+{
+    $this->db->select('produtos.*, modelo.nomeModelo');
+    $this->db->from('produtos');
+    $this->db->join('modelo', 'modelo.idModelo = produtos.idModelo');
+    $this->db->where('produtos.idProdutos', $id);
+    $this->db->limit(1);
+    return $this->db->get()->row();
+}
+
     
     public function add($table, $data)
     {
@@ -45,7 +49,8 @@ class Produtos_model extends CI_Model
         
         return false;
     }
-    
+
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);

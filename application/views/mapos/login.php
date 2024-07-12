@@ -146,8 +146,8 @@ $parse_cpfcnpj = $this->input->get('c');
                                         <div class="center"><button id="btn-acessar">Acessar</button>
                                         </div>
 
-                                        <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                                                <p><?= date('Y'); ?> &copy; Ramon Silva</p>
+                                        <div class="links-uteis"><a href="">
+                                                <p><?= date('Y'); ?> &copy; Map-OS</p>
                                             </a></div>
                                     </form>
                                 </div>
@@ -186,8 +186,8 @@ $parse_cpfcnpj = $this->input->get('c');
                                         <div class="links-uteis"><a href="<?= site_url('mine/resetarSenha') ?>">
                                                 <p style="margin:0px 0 18px">Esqueceu a senha?</p>
                                             </a></div>
-                                        <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                                                <p><?= date('Y'); ?> &copy; Ramon Silva</p>
+                                        <div class="links-uteis"><a href="">
+                                                <p><?= date('Y'); ?> &copy; Map-OS</p>
                                             </a></div>
 
                                     </form>
