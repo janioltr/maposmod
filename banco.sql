@@ -299,22 +299,22 @@ DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- Table `status_os`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `status_os` (
-    `id` INT AUTO_INCREMENT,
-    `nome_status` VARCHAR(255) NOT NULL,
-    `descricao` VARCHAR(255) NOT NULL,
-    `ativa` BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY (id)
+  `id` INT AUTO_INCREMENT,
+  `nome_status` VARCHAR(255) NOT NULL,
+  `descricao` VARCHAR(255) NOT NULL,
+  `ativa` BOOLEAN DEFAULT TRUE,
+  PRIMARY KEY (id)
 )ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `usuario_status_os`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `usuario_status_os` (
-    `status_id` INT,
-    `usuario_id` INT,
-    FOREIGN KEY (`status_id`) REFERENCES status_os(id),
-    FOREIGN KEY (`usuario_id`) REFERENCES usuarios(idUsuarios),
-    PRIMARY KEY (`status_id`, `usuario_id`)
+  `status_id` INT,
+  `usuario_id` INT,
+  FOREIGN KEY (`status_id`) REFERENCES status_os(id),
+  FOREIGN KEY (`usuario_id`) REFERENCES usuarios(idUsuarios),
+  PRIMARY KEY (`status_id`, `usuario_id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
@@ -336,20 +336,30 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `estoqueMinimo` INT(11) NULL DEFAULT NULL,
   `saida` TINYINT(1) NULL DEFAULT NULL,
   `entrada` TINYINT(1) NULL DEFAULT NULL,
+  `idCondicao` INT(11) NULL,
+  `idDirecao` INT(11) NULL,
+  `dataPedido` DATE NULL,
+  `dataChegada` DATE NULL,
+  `idCompativel` INT(11) NULL,
+  `numeroPeca` VARCHAR(80) NULL,
   PRIMARY KEY (`idProdutos`),
-  FOREIGN KEY (`idModelo`) REFERENCES `modelo`(`idModelo`)
-)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+  FOREIGN KEY (`idModelo`) REFERENCES `modelo`(`idModelo`),
+  FOREIGN KEY (`idCondicao`) REFERENCES `condicoes`(`idCondicao`),
+  FOREIGN KEY (`idDirecao`) REFERENCES `direcao`(`idDirecao`),
+  FOREIGN KEY (`idCompativel`) REFERENCES `compativeis`(`idCompativel`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
 
 -- -----------------------------------------------------
 -- Table `modelo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `modelo` (
-    `idModelo` INT(11) NOT NULL AUTO_INCREMENT,
-    `nomeModelo` VARCHAR(80) NOT NULL,
-    PRIMARY KEY (`idModelo`)
+  `idModelo` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeModelo` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`idModelo`)
 )
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
@@ -359,27 +369,56 @@ DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- Table `compativeis`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compativeis` (
-  `idProduto` INT(11) NOT NULL,
-  `idModeloCompativel` INT(11) NOT NULL,
+  `idCompativel` INT(11) NOT NULL AUTO_INCREMENT,
   `modeloCompativel` VARCHAR(80) NOT NULL,
-  PRIMARY KEY (`idProduto`, `idModeloCompativel`),
-  FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`) ON DELETE CASCADE,
-  FOREIGN KEY (`idModeloCompativel`) REFERENCES `modelo`(`idModelo`) ON DELETE CASCADE
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+  PRIMARY KEY (`idCompativel`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 
 -- -----------------------------------------------------
 -- Table `imagens_produto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `imagens_produto` (
-  `idImagem` INT(11) NOT NULL AUTO_INCREMENT,
-  `idProduto` INT(11) NOT NULL,
-  `urlImagem` VARCHAR(255) NOT NULL,
+  `idImagem` INT NOT NULL AUTO_INCREMENT,
+  `anexo` VARCHAR(45) NULL,
+  `thumb` VARCHAR(45) NULL,
+  `urlImagem` VARCHAR(300) NULL,
+  `path` VARCHAR(300) NULL,
+  `produto_id` INT(11) NOT NULL,
   PRIMARY KEY (`idImagem`),
-  FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+  INDEX `fk_img_produto1` (`produto_id` ASC),
+  CONSTRAINT `fk_img_produto1`
+    FOREIGN KEY (`produto_id`)
+    REFERENCES `produtos` (`idProdutos`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+
+-- -----------------------------------------------------
+-- Table `condicoes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `condicoes` (
+  `idCondicao` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricaoCondicao` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`idCondicao`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table `direcao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `direcao` (
+  `idDirecao` INT(11) NOT NULL AUTO_INCREMENT,
+  `descricaoDirecao` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`idDirecao`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `produtos_os`
