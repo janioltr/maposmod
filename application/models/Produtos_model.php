@@ -31,13 +31,31 @@ class Produtos_model extends CI_Model
 
     public function getById($id)
 {
-    $this->db->select('produtos.*, modelo.nomeModelo');
+    $this->db->select('
+        produtos.*, 
+        modelo.nomeModelo, 
+        condicoes.descricaoCondicao, 
+        direcao.descricaoDirecao
+    ');
     $this->db->from('produtos');
     $this->db->join('modelo', 'modelo.idModelo = produtos.idModelo');
+    $this->db->join('condicoes', 'condicoes.idCondicao = produtos.idCondicao', 'left');
+    $this->db->join('direcao', 'direcao.idDirecao = produtos.idDirecao', 'left');
     $this->db->where('produtos.idProdutos', $id);
     $this->db->limit(1);
-    return $this->db->get()->row();
+    $produto = $this->db->get()->row();
+
+    if ($produto) {
+        $this->db->select('compativeis.modeloCompativel');
+        $this->db->from('produto_compativel');
+        $this->db->join('compativeis', 'compativeis.idCompativel = produto_compativel.idCompativel');
+        $this->db->where('produto_compativel.idProduto', $id);
+        $produto->compativelProdutos = $this->db->get()->result();
+    }
+
+    return $produto;
 }
+
 
     
     public function add($table, $data)

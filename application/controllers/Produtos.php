@@ -24,30 +24,44 @@ class Produtos extends MY_Controller
         $this->gerenciar();
     }
 
+    
+
     public function gerenciar()
-      {
-          if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-              $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
-              redirect(base_url());
-          }
-      
-          $this->load->library('pagination');
-      
-          $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
-          $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
-      
-          $this->pagination->initialize($this->data['configuration']);
-      
-          // Ajuste a consulta para incluir a tabela `modelo`
-          $this->db->select('produtos.*, modelo.nomeModelo');
-          $this->db->from('produtos');
-          $this->db->join('modelo', 'modelo.idModelo = produtos.idModelo');
-          $this->db->limit($this->data['configuration']['per_page'], $this->uri->segment(3));
-          $this->data['results'] = $this->db->get()->result();
-      
-          $this->data['view'] = 'produtos/produtos';
-          return $this->layout();
-      }
+{
+    if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+        $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
+        redirect(base_url());
+    }
+
+    $this->load->library('pagination');
+
+    $this->data['configuration']['base_url'] = site_url('produtos/gerenciar/');
+    $this->data['configuration']['total_rows'] = $this->produtos_model->count('produtos');
+
+    $this->pagination->initialize($this->data['configuration']);
+
+    // Ajuste a consulta para incluir as novas colunas e tabelas relacionadas
+    $this->db->select('
+        produtos.*, 
+        modelo.nomeModelo, 
+        condicoes.descricaoCondicao, 
+        direcao.descricaoDirecao, 
+        compativeis.modeloCompativel
+    ');
+    $this->db->from('produtos');
+    $this->db->join('modelo', 'modelo.idModelo = produtos.idModelo');
+    $this->db->join('condicoes', 'condicoes.idCondicao = produtos.idCondicao', 'left');
+    $this->db->join('direcao', 'direcao.idDirecao = produtos.idDirecao', 'left');
+    $this->db->join('compativeis', 'compativeis.idCompativel = produtos.idCompativel', 'left');
+    $this->db->limit($this->data['configuration']['per_page'], $this->uri->segment(3));
+    $this->data['results'] = $this->db->get()->result();
+
+    $this->data['view'] = 'produtos/produtos';
+    return $this->layout();
+}
+
+         
+
 
     public function adicionar()
 {
@@ -66,15 +80,43 @@ class Produtos extends MY_Controller
         $precoCompra = str_replace(",", "", $precoCompra);
         $precoVenda = $this->input->post('precoVenda');
         $precoVenda = str_replace(",", "", $precoVenda);
-
+    
         // Salvar o modelo na tabela `modelo`
         $modeloProduto = set_value('modeloProduto');
         $modeloData = ['nomeModelo' => $modeloProduto];
         $this->produtos_model->add('modelo', $modeloData);
-
+    
         // Obter o ID do modelo recém-adicionado
         $idModelo = $this->db->insert_id();
-
+    
+        // Salvar a condição na tabela `condicoes`
+        $condicaoProduto = set_value('condicaoProduto');
+        $condicaoData = ['descricaoCondicao' => $condicaoProduto];
+        $this->produtos_model->add('condicoes', $condicaoData);
+    
+        // Obter o ID da condição recém-adicionada
+        $idCondicao = $this->db->insert_id();
+    
+        // Salvar a direção na tabela `direcao`
+        $direcaoProduto = set_value('direcaoProduto');
+        $direcaoData = ['descricaoDirecao' => $direcaoProduto];
+        $this->produtos_model->add('direcao', $direcaoData);
+    
+        // Obter o ID da direção recém-adicionada
+        $idDirecao = $this->db->insert_id();
+    
+        // Salvar os modelos compatíveis na tabela `compativeis`
+        $compativelProdutos = $this->input->post('compativelProduto');
+        $idCompativeis = [];
+        foreach ($compativelProdutos as $compativelProduto) {
+            if (!empty($compativelProduto)) {
+                $compativelData = ['modeloCompativel' => $compativelProduto];
+                $this->produtos_model->add('compativeis', $compativelData);
+                $idCompativeis[] = $this->db->insert_id();
+            }
+        }
+    
+        // Preparar os dados para a tabela `produtos`
         $data = [
             'codDeBarra' => set_value('codDeBarra'),
             'descricao' => set_value('descricao'),
@@ -90,8 +132,14 @@ class Produtos extends MY_Controller
             'estoqueMinimo' => set_value('estoqueMinimo'),
             'saida' => set_value('saida'),
             'entrada' => set_value('entrada'),
+            'idCondicao' => $idCondicao,
+            'idDirecao' => $idDirecao,
+            'dataPedido' => set_value('dataPedido'),
+            'dataChegada' => set_value('dataChegada'),
+            'idCompativel' => implode(',', $idCompativeis), // Salvar IDs dos modelos compatíveis como string separada por vírgulas
+            'numeroPeca' => set_value('numeroPeca')
         ];
-
+    
         if ($this->produtos_model->add('produtos', $data) == true) {
             $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
             log_info('Adicionou um produto');
@@ -125,12 +173,43 @@ class Produtos extends MY_Controller
         $precoCompra = str_replace(",", "", $precoCompra);
         $precoVenda = $this->input->post('precoVenda');
         $precoVenda = str_replace(",", "", $precoVenda);
-
+    
         // Atualizar o modelo na tabela `modelo`
         $nomeModelo = $this->input->post('nomeModelo');
         $modeloData = ['nomeModelo' => $nomeModelo];
         $this->produtos_model->edit('modelo', $modeloData, 'idModelo', $this->input->post('idModelo'));
-
+    
+        // Atualizar a condição na tabela `condicoes`
+        $descricaoCondicao = $this->input->post('descricaoCondicao');
+        $condicaoData = ['descricaoCondicao' => $descricaoCondicao];
+        $this->produtos_model->edit('condicoes', $condicaoData, 'idCondicao', $this->input->post('idCondicao'));
+    
+        // Atualizar a direção na tabela `direcao`
+        $descricaoDirecao = $this->input->post('descricaoDirecao');
+        $direcaoData = ['descricaoDirecao' => $descricaoDirecao];
+        $this->produtos_model->edit('direcao', $direcaoData, 'idDirecao', $this->input->post('idDirecao'));
+    
+        // Atualizar os modelos compatíveis na tabela `compativeis`
+    $compativelProdutos = $this->input->post('compativelProduto');
+    $idCompativeis = [];
+    foreach ($compativelProdutos as $compativelProduto) {
+        if (!empty($compativelProduto)) {
+            $compativelData = ['modeloCompativel' => $compativelProduto];
+            // Verificar se o modelo compatível já existe
+            $existing = $this->produtos_model->get_by('compativeis', ['modeloCompativel' => $compativelProduto]);
+            if ($existing) {
+                // Atualizar o modelo compatível existente
+                $this->produtos_model->edit('compativeis', $compativelData, 'idCompativel', $existing->idCompativel);
+                $idCompativeis[] = $existing->idCompativel;
+            } else {
+                // Adicionar novo modelo compatível
+                $this->produtos_model->add('compativeis', $compativelData);
+                $idCompativeis[] = $this->db->insert_id();
+            }
+        }
+    }
+    
+        // Preparar os dados para a tabela `produtos`
         $data = [
             'codDeBarra' => set_value('codDeBarra'),
             'descricao' => $this->input->post('descricao'),
@@ -138,6 +217,7 @@ class Produtos extends MY_Controller
             'idModelo' => $this->input->post('idModelo'),
             'nsProduto' => $this->input->post('nsProduto'),
             'codigoPeca' => $this->input->post('codigoPeca'),
+            'localizacaoProduto' => $this->input->post('localizacaoProduto'),
             'unidade' => $this->input->post('unidade'),
             'precoCompra' => $precoCompra,
             'precoVenda' => $precoVenda,
@@ -145,8 +225,13 @@ class Produtos extends MY_Controller
             'estoqueMinimo' => $this->input->post('estoqueMinimo'),
             'saida' => set_value('saida'),
             'entrada' => set_value('entrada'),
+            'idCondicao' => $this->input->post('idCondicao'),
+            'idDirecao' => $this->input->post('idDirecao'),
+            'dataPedido' => $this->input->post('dataPedido'),
+            'dataChegada' => $this->input->post('dataChegada'),
+            'idCompativel' => implode(',', $idCompativeis), // Salvar IDs dos modelos compatíveis como string separada por vírgulas
+            'numeroPeca' => $this->input->post('numeroPeca')
         ];
-
        
         if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
             $this->session->set_flashdata('success', 'Produto editado com sucesso!');

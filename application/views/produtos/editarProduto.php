@@ -40,7 +40,9 @@
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <?php echo form_hidden('idModelo', $result->idModelo) ?>
+                        <?php echo form_hidden('idCompativel', $result->idCompativel) ?>
                         
+                       
                     </div>
                     <div class="control-group">
                         <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
@@ -61,6 +63,53 @@
                             <input id="nomeModelo" type="text" name="nomeModelo" value="<?php echo $result->nomeModelo; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
+
+
+
+                    <div class="control-group">
+                        <label for="compativelProduto" class="control-label">Modelo Compatível<span class="required">*</span></label>
+                        <div class="controls">
+                            <input id="compativelProduto_0" type="text" name="compativelProduto[]"
+                                value="<?php echo set_value('compativelProduto'); ?>"
+                                onChange="javascript:this.value=this.value.toUpperCase();" />
+                            <button type="button" id="addCompativelProduto" class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </div>
+                    <div id="additionalCompativelProdutos"></div>
+
+                    <!-- #region -->
+
+                    <div class="control-group">
+    <label for="nomeModelo" class="control-label">Modelo<span class="required">*</span></label>
+    <div class="controls">
+        <input id="nomeModelo" type="text" name="nomeModelo" value="<?php echo $result->nomeModelo; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
+    </div>
+</div>
+
+<div class="control-group">
+    <label for="compativelProduto" class="control-label">Modelos Compatíveis</label>
+    <div id="additionalCompativelProdutos" class="controls">
+        <?php foreach ($result->compativelProdutos as $compativelProduto): ?>
+            <div class="control-group">
+                <input type="text" name="compativelProduto[]" value="<?php echo $compativelProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+
+
+
+
+                     <!-- #region -->
+
+
+                    
+
+
+
+
+
                     <div class="control-group">
                         <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
                         <div class="controls">
@@ -254,3 +303,36 @@
         });
     });
 </script>
+
+
+
+
+
+<script>
+    document.getElementById('addCompativelProduto').addEventListener('click', function() {
+        var input = document.getElementById('compativelProduto_0');
+        var value = input.value;
+        if (value) {
+            var list = document.getElementById('additionalCompativelProdutos');
+            var item = document.createElement('div');
+            item.className = 'control-group';
+            item.innerHTML = `
+                <div class="controls">
+                    <input type="text" name="compativelProduto[]" value="${value}" onChange="javascript:this.value=this.value.toUpperCase();" />
+                    <button type="button" class="btn btn-primary editCompativelProduto">Editar</button>
+                </div>
+            `;
+            list.appendChild(item);
+            input.value = '';
+        }
+    });
+
+    document.getElementById('additionalCompativelProdutos').addEventListener('click', function(event) {
+        if (event.target.classList.contains('editCompativelProduto')) {
+            var input = event.target.previousElementSibling;
+            input.removeAttribute('readonly');
+            input.focus();
+        }
+    });
+</script>
+

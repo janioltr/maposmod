@@ -378,6 +378,17 @@ CREATE TABLE IF NOT EXISTS `compativeis` (
 
 
 -- -----------------------------------------------------
+-- Table `produto_compativel`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `produto_compativel` (
+    `idProdutoCompativel` INT AUTO_INCREMENT PRIMARY KEY,
+    `idProduto` INT,
+    `idCompativel` INT,
+    FOREIGN KEY (`idProduto`) REFERENCES `produtos`(`idProdutos`),
+    FOREIGN KEY (`idCompativel`) REFERENCES `compativeis`(`idCompativel`)
+);
+
+-- -----------------------------------------------------
 -- Table `imagens_produto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `imagens_produto` (
