@@ -41,6 +41,7 @@
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <?php echo form_hidden('idModelo', $result->idModelo) ?>
                         <?php echo form_hidden('idCondicao', $result->idCondicao) ?>
+                        <?php echo form_hidden('idDirecao', $result->idDirecao) ?>
                         
                     </div>
                     <div class="control-group">
@@ -90,6 +91,26 @@
                             <option <?php if ($result->descricaoCondicao == 'Defeito') {
                                 echo 'selected';
                             } ?> value="Defeito">Defeito
+                            </option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="descricaoDirecao" class="control-label">Direção<span class="required"></span></label>
+                        <div class="controls">
+                        <select class="" name="descricaoDirecao" id="descricaoDirecao" value="">
+                            <option <?php if ($result->descricaoDirecao == 'Estoque') {
+                                echo 'selected';
+                            } ?> value="Estoque">Estoque
+                            </option>
+                            <option <?php if ($result->descricaoDirecao == 'Garantia') {
+                                echo 'selected';
+                            } ?>   value="Garantia">Garantia
+                            </option>
+                            <option <?php if ($result->descricaoDirecao == 'Pedido') {
+                                echo 'selected';
+                            } ?>   value="Pedido">Pedido
                             </option>
                         </select>
                         </div>
