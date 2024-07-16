@@ -65,11 +65,6 @@
                         </div>
                     </div>
 
-                    
-
-                    
-
-
                     <div class="control-group">
                         <label for="compativelProduto" class="control-label">Modelo Compatível<span class="required"></span></label>
                         <div class="controls">
@@ -104,7 +99,6 @@
                             </select>
                         </div>
                     </div>
-
 
                     <div class="control-group">
                         <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>

@@ -40,9 +40,8 @@
                     <div class="control-group">
                         <?php echo form_hidden('idProdutos', $result->idProdutos) ?>
                         <?php echo form_hidden('idModelo', $result->idModelo) ?>
-                        <?php echo form_hidden('idCompativel', $result->idCompativel) ?>
+                        <?php echo form_hidden('idCondicao', $result->idCondicao) ?>
                         
-                       
                     </div>
                     <div class="control-group">
                         <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
@@ -64,50 +63,40 @@
                         </div>
                     </div>
 
-
-
-                    <div class="control-group">
-                        <label for="compativelProduto" class="control-label">Modelo Compatível<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="compativelProduto_0" type="text" name="compativelProduto[]"
-                                value="<?php echo set_value('compativelProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                            <button type="button" id="addCompativelProduto" class="btn btn-primary">Adicionar</button>
-                        </div>
-                    </div>
-                    <div id="additionalCompativelProdutos"></div>
-
-                    <!-- #region -->
-
-                    <div class="control-group">
-    <label for="nomeModelo" class="control-label">Modelo<span class="required">*</span></label>
-    <div class="controls">
-        <input id="nomeModelo" type="text" name="nomeModelo" value="<?php echo $result->nomeModelo; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
-    </div>
-</div>
-
-<div class="control-group">
-    <label for="compativelProduto" class="control-label">Modelos Compatíveis</label>
-    <div id="additionalCompativelProdutos" class="controls">
-        <?php foreach ($result->compativelProdutos as $compativelProduto): ?>
-            <div class="control-group">
-                <input type="text" name="compativelProduto[]" value="<?php echo $compativelProduto; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
-
-
-
-
-                     <!-- #region -->
-
-
                     
 
+                    <!-- #teste -->
 
+                    <div class="control-group">
+                        <label for="descricaoCondicao" class="control-label">Condição<span class="required"></span></label>
+                        <div class="controls">
+                        <select class="" name="descricaoCondicao" id="descricaoCondicao" value="">
+                            <option <?php if ($result->descricaoCondicao == 'Novo') {
+                                echo 'selected';
+                            } ?> value="Novo">Novo
+                            </option>
+                            <option <?php if ($result->descricaoCondicao == 'Usado') {
+                                echo 'selected';
+                            } ?>   value="Usado">Usado
+                            </option>
+                            <option <?php if ($result->descricaoCondicao == 'Recondicionado') {
+                                echo 'selected';
+                            } ?>   value="Recondicionado">Recondicionado
+                            </option>
+                            <option <?php if ($result->descricaoCondicao == 'Suspeito') {
+                                echo 'selected';
+                            } ?> value="Suspeito">Suspeito
+                            </option>
+                            <option <?php if ($result->descricaoCondicao == 'Defeito') {
+                                echo 'selected';
+                            } ?> value="Defeito">Defeito
+                            </option>
+                        </select>
+                        </div>
+                    </div>
 
+                
+                    <!-- #teste -->
 
 
                     <div class="control-group">
@@ -123,6 +112,14 @@
                             <input id="codigoPeca" type="text" name="codigoPeca" value="<?php echo $result->codigoPeca; ?>" onChange="javascript:this.value=this.value.toUpperCase();"/>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label for="numeroPeca" class="control-label">Número da Peça<span class=""></span></label>
+                        <div class="controls">
+                            <input id="numeroPeca" type="text" name="numeroPeca" value="<?php echo $result->numeroPeca; ?>" onChange="javascript:this.value=this.value.toUpperCase();"/>
+                        </div>
+                    </div>
+
 
                     <div class="control-group">
                         <label for="localizacaoProduto" class="control-label">Localização<span class=""></span></label>
@@ -318,7 +315,7 @@
             item.className = 'control-group';
             item.innerHTML = `
                 <div class="controls">
-                    <input type="text" name="compativelProduto[]" value="${value}" onChange="javascript:this.value=this.value.toUpperCase();" />
+                    <input type="text" name="compativelProduto[]" value="${value}" onChange="javascript:this.value=this.value.toUpperCase();" readonly />
                     <button type="button" class="btn btn-primary editCompativelProduto">Editar</button>
                 </div>
             `;
@@ -335,4 +332,7 @@
         }
     });
 </script>
+
+
+
 

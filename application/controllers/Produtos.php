@@ -152,7 +152,7 @@ class Produtos extends MY_Controller
         return $this->layout();
     }
 
-    public function editar()
+public function editar()
 {
     if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
         $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
@@ -188,27 +188,7 @@ class Produtos extends MY_Controller
         $descricaoDirecao = $this->input->post('descricaoDirecao');
         $direcaoData = ['descricaoDirecao' => $descricaoDirecao];
         $this->produtos_model->edit('direcao', $direcaoData, 'idDirecao', $this->input->post('idDirecao'));
-    
-        // Atualizar os modelos compatíveis na tabela `compativeis`
-    $compativelProdutos = $this->input->post('compativelProduto');
-    $idCompativeis = [];
-    foreach ($compativelProdutos as $compativelProduto) {
-        if (!empty($compativelProduto)) {
-            $compativelData = ['modeloCompativel' => $compativelProduto];
-            // Verificar se o modelo compatível já existe
-            $existing = $this->produtos_model->get_by('compativeis', ['modeloCompativel' => $compativelProduto]);
-            if ($existing) {
-                // Atualizar o modelo compatível existente
-                $this->produtos_model->edit('compativeis', $compativelData, 'idCompativel', $existing->idCompativel);
-                $idCompativeis[] = $existing->idCompativel;
-            } else {
-                // Adicionar novo modelo compatível
-                $this->produtos_model->add('compativeis', $compativelData);
-                $idCompativeis[] = $this->db->insert_id();
-            }
-        }
-    }
-    
+
         // Preparar os dados para a tabela `produtos`
         $data = [
             'codDeBarra' => set_value('codDeBarra'),
@@ -229,7 +209,7 @@ class Produtos extends MY_Controller
             'idDirecao' => $this->input->post('idDirecao'),
             'dataPedido' => $this->input->post('dataPedido'),
             'dataChegada' => $this->input->post('dataChegada'),
-            'idCompativel' => implode(',', $idCompativeis), // Salvar IDs dos modelos compatíveis como string separada por vírgulas
+
             'numeroPeca' => $this->input->post('numeroPeca')
         ];
        

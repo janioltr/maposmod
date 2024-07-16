@@ -51,10 +51,13 @@ class Produtos_model extends CI_Model
         $this->db->join('compativeis', 'compativeis.idCompativel = produto_compativel.idCompativel');
         $this->db->where('produto_compativel.idProduto', $id);
         $produto->compativelProdutos = $this->db->get()->result();
+    } else {
+        $produto->compativelProdutos = [];
     }
 
     return $produto;
 }
+
 
 
     
