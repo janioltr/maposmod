@@ -42,6 +42,8 @@
                         <?php echo form_hidden('idModelo', $result->idModelo) ?>
                         <?php echo form_hidden('idCondicao', $result->idCondicao) ?>
                         <?php echo form_hidden('idDirecao', $result->idDirecao) ?>
+                        <?php echo form_hidden('idCompativel', $result->idCompativel) ?>
+                        
                         
                     </div>
                     <div class="control-group">
@@ -63,6 +65,39 @@
                             <input id="nomeModelo" type="text" name="nomeModelo" value="<?php echo $result->nomeModelo; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
+
+                    <!-- #compativeis inicio -->
+
+
+                   
+
+                    
+
+                    <!-- #2 compativel -->
+                    <div class="control-group">
+                        <label for="compativelProduto" class="control-label">Modelo Compatível<span class="required"></span></label>
+                        <div class="controls">
+                            <input id="compativelProduto_0" type="text" name="compativelProduto[]"
+                                value="<?php echo set_value('compativelProduto'); ?>"
+                                onChange="javascript:this.value=this.value.toUpperCase();" />
+                            <button type="button" id="addCompativelProduto" class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </div>
+                    <div id="additionalCompativelProdutos">
+                        <?php foreach ($modelos_compativeis as $index => $modelo): ?>
+                            <div class="control-group">
+                                <label for="compativelProduto_<?php echo $index; ?>" class="control-label">Modelo Compatível<span class="required"></span></label>
+                                <div class="controls">
+                                    <input id="compativelProduto_<?php echo $index; ?>" type="text" name="compativelProduto[]"
+                                        value="<?php echo $modelo->modeloCompativel; ?>"
+                                        onChange="javascript:this.value=this.value.toUpperCase();" />
+                                    <button type="button" class="btn btn-danger removeCompativelProduto">Remover</button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- #compativeis final -->
 
                     
 
@@ -118,6 +153,12 @@
 
                 
                     <!-- #teste -->
+
+                    <!-- #imagem -->
+
+                    
+
+                    <!-- #imagem -->
 
 
                     <div class="control-group">
@@ -322,37 +363,50 @@
     });
 </script>
 
+<!-- #inicio anexo -->
 
 
+ <!-- #final  -->
+ <script>
+let compativelProdutoCounter = <?php echo count($modelos_compativeis); ?>;
 
+document.getElementById('addCompativelProduto').addEventListener('click', function() {
+    const inputs = document.querySelectorAll('input[name="compativelProduto[]"]');
+    let allFilled = true;
 
-<script>
-    document.getElementById('addCompativelProduto').addEventListener('click', function() {
-        var input = document.getElementById('compativelProduto_0');
-        var value = input.value;
-        if (value) {
-            var list = document.getElementById('additionalCompativelProdutos');
-            var item = document.createElement('div');
-            item.className = 'control-group';
-            item.innerHTML = `
-                <div class="controls">
-                    <input type="text" name="compativelProduto[]" value="${value}" onChange="javascript:this.value=this.value.toUpperCase();" readonly />
-                    <button type="button" class="btn btn-primary editCompativelProduto">Editar</button>
-                </div>
-            `;
-            list.appendChild(item);
-            input.value = '';
+    inputs.forEach(function(input) {
+        if (input.value.trim() === '') {
+            allFilled = false;
         }
     });
 
-    document.getElementById('additionalCompativelProdutos').addEventListener('click', function(event) {
-        if (event.target.classList.contains('editCompativelProduto')) {
-            var input = event.target.previousElementSibling;
-            input.removeAttribute('readonly');
-            input.focus();
-        }
-    });
+    if (allFilled) {
+        const newInput = document.createElement('div');
+        newInput.className = 'control-group';
+        newInput.innerHTML = `
+            <label for="compativelProduto_${compativelProdutoCounter}" class="control-label">Modelo Compatível<span class="required"></span></label>
+            <div class="controls">
+                <input id="compativelProduto_${compativelProdutoCounter}" type="text" name="compativelProduto[]"
+                    value=""
+                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                <button type="button" class="btn btn-danger removeCompativelProduto">Remover</button>
+            </div>
+        `;
+        document.getElementById('additionalCompativelProdutos').appendChild(newInput);
+        compativelProdutoCounter++;
+    } else {
+        alert('Por favor, preencha todos os campos Modelo Compativel antes de adicionar um novo.');
+    }
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.className.includes('removeCompativelProduto')) {
+        e.target.parentElement.parentElement.remove();
+    }
+});
 </script>
+
+
 
 
 

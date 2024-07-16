@@ -408,7 +408,6 @@ CREATE TABLE IF NOT EXISTS `imagens_produto` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-
 -- -----------------------------------------------------
 -- Table `condicoes`
 -- -----------------------------------------------------

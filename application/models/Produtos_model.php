@@ -83,6 +83,8 @@ class Produtos_model extends CI_Model
         
         return false;
     }
+
+
     
     public function delete($table, $fieldID, $ID)
     {
@@ -105,4 +107,54 @@ class Produtos_model extends CI_Model
         $sql = "UPDATE produtos set estoque = estoque $operacao ? WHERE idProdutos = ?";
         return $this->db->query($sql, [$quantidade, $produto]);
     }
+
+    // modificações
+
+    public function anexar($produtos, $anexo, $url, $thumb, $path)
+    {
+        $this->db->set('anexo', $anexo);
+        $this->db->set('url', $url);
+        $this->db->set('thumb', $thumb);
+        $this->db->set('path', $path);
+        $this->db->set('produto_id', $produtos);
+
+        return $this->db->insert('imagens_produto');
+    }
+
+    public function getAnexos($produtos)
+    {
+        $this->db->where('produto_id', $produtos);
+        return $this->db->get('imagens_produto')->result();
+    }
+
+    // segunda modificação
+    public function update_modelos_compativeis($idProduto, $modelosCompativeis) {
+        // Primeiro, removemos todas as entradas atuais para o produto
+        $this->db->where('idProduto', $idProduto);
+        $this->db->delete('produto_compativel');
+    
+        // Em seguida, adicionamos as novas entradas
+        foreach ($modelosCompativeis as $idCompativel) {
+            $data = array(
+                'idProduto' => $idProduto,
+                'idCompativel' => $idCompativel
+            );
+            $this->db->insert('produto_compativel', $data);
+        }
+    }
+
+
+    public function get_modelos_compativeis($idProduto) {
+        $this->db->select('compativeis.modeloCompativel');
+        $this->db->from('produto_compativel');
+        $this->db->join('compativeis', 'produto_compativel.idCompativel = compativeis.idCompativel');
+        $this->db->where('produto_compativel.idProduto', $idProduto);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
+
+
+    
+
 }

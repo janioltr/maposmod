@@ -37,6 +37,12 @@
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                    <!-- #imagem -->
+                   
+
+                    <!-- #fim imagem -->
+
+
                     
                     <div class="control-group">
                         <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
@@ -320,9 +326,6 @@ $(document).ready(function() {
 </script>
 
 <script>
-
-
-
 let compativelProdutoCounter = 1;
 
 document.getElementById('addCompativelProduto').addEventListener('click', function() {
@@ -359,9 +362,6 @@ document.addEventListener('click', function(e) {
         e.target.parentElement.parentElement.remove();
     }
 });
-
-
-
 
 </script>
 
