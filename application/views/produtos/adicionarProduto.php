@@ -350,7 +350,7 @@ document.getElementById('addCompativelProduto').addEventListener('click', functi
         document.getElementById('additionalCompativelProdutos').appendChild(newInput);
         compativelProdutoCounter++;
     } else {
-        alert('Por favor, preencha todos os campos antes de adicionar um novo.');
+        alert('Por favor, preencha todos os campos Modelo Compativel antes de adicionar um novo.');
     }
 });
 
