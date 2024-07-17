@@ -136,29 +136,52 @@ class Produtos_model extends CI_Model
         $query = $this->db->get();
         $existingIds = array_column($query->result_array(), 'idCompativel');
     
+        // Garantir que $modelosCompativeis seja um array
+        if (!is_array($modelosCompativeis)) {
+            $modelosCompativeis = [];
+        }
+    
         // Identificar ids a serem removidos
-        $idsToRemove = array_diff($existingIds, $modelosCompativeis);
+        $idsToRemove = array_diff($existingIds, array_column($modelosCompativeis, 'idCompativel'));
         if (!empty($idsToRemove)) {
             $this->db->where('idProduto', $idProduto);
             $this->db->where_in('idCompativel', $idsToRemove);
             $this->db->delete('produto_compativel');
+    
+            // Também remover da tabela `compativeis`
+            $this->db->where_in('idCompativel', $idsToRemove);
+            $this->db->delete('compativeis');
         }
     
-        // Adicionar novos ids
-        foreach ($modelosCompativeis as $idCompativel) {
-            if (!in_array($idCompativel, $existingIds)) {
-                $data = array(
+        // Atualizar ou adicionar novos ids
+        foreach ($modelosCompativeis as $modeloCompativel) {
+            if (is_array($modeloCompativel) && in_array($modeloCompativel['idCompativel'], $existingIds)) {
+                // Atualizar o modelo compatível existente
+                $this->db->where('idCompativel', $modeloCompativel['idCompativel']);
+                $this->db->update('compativeis', ['modeloCompativel' => $modeloCompativel['modeloCompativel']]);
+            } elseif (is_array($modeloCompativel) && !in_array($modeloCompativel['idCompativel'], $existingIds)) {
+                // Adicionar novo modelo compatível
+                $compativelData = ['modeloCompativel' => $modeloCompativel['modeloCompativel']];
+                $this->db->insert('compativeis', $compativelData);
+                $idCompativel = $this->db->insert_id();
+    
+                // Adicionar na tabela `produto_compativel`
+                $produtoCompativelData = [
                     'idProduto' => $idProduto,
                     'idCompativel' => $idCompativel
-                );
-                $this->db->insert('produto_compativel', $data);
+                ];
+                $this->db->insert('produto_compativel', $produtoCompativelData);
             }
         }
     }
+    
+    
+    
+    
 
 
     public function get_modelos_compativeis($idProduto) {
-        $this->db->select('compativeis.modeloCompativel');
+        $this->db->select('compativeis.idCompativel, compativeis.modeloCompativel');
         $this->db->from('produto_compativel');
         $this->db->join('compativeis', 'produto_compativel.idCompativel = compativeis.idCompativel');
         $this->db->where('produto_compativel.idProduto', $idProduto);
@@ -170,6 +193,9 @@ class Produtos_model extends CI_Model
             return []; // Retorna um array vazio se não houver resultados
         }
     }
+    
+
+
     
     
     

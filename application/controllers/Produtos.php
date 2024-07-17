@@ -245,11 +245,22 @@ if (is_array($compativelProdutos)) {
     
             if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
                 $this->produtos_model->edit('imagens_produto', $imagensData, 'produto_id', $this->input->post('idProdutos'));
-    
+            
                 // Atualizar os modelos compatíveis
                 $modelosCompativeis = $this->input->post('compativelProduto');
-                $this->produtos_model->update_modelos_compativeis($this->input->post('idProdutos'), $modelosCompativeis);
-    
+                $modelosCompativeisArray = [];
+            
+                if (is_array($modelosCompativeis)) {
+                    foreach ($modelosCompativeis as $index => $modeloCompativel) {
+                        $modelosCompativeisArray[] = [
+                            'idCompativel' => $this->input->post('idCompativel')[$index] ?? null,
+                            'modeloCompativel' => $modeloCompativel
+                        ];
+                    }
+                }
+            
+                $this->produtos_model->update_modelos_compativeis($this->input->post('idProdutos'), $modelosCompativeisArray);
+            
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
                 log_info('Editou um produto');
                 redirect(site_url('produtos/editar/' . $this->input->post('idProdutos')));
@@ -307,6 +318,13 @@ if (is_array($compativelProdutos)) {
     $produto = $this->produtos_model->getById($id);
     $idModelo = $produto->idModelo;
 
+    // Obter os ids dos modelos compatíveis
+    $modelosCompativeis = $this->produtos_model->get_modelos_compativeis($id);
+    $idCompativeis = array_map(function($modelo) {
+        return $modelo->idCompativel;
+    }, $modelosCompativeis);
+
+    // Excluir os registros das tabelas relacionadas
     $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
     $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
     $this->produtos_model->delete('produtos', 'idProdutos', $id);
@@ -314,11 +332,20 @@ if (is_array($compativelProdutos)) {
     // Excluir o modelo da tabela `modelo`
     $this->produtos_model->delete('modelo', 'idModelo', $idModelo);
 
-    log_info('Removeu um produto e seu modelo. ID: ' . $id);
+    // Excluir os modelos compatíveis da tabela `compativeis`
+    foreach ($idCompativeis as $idCompativel) {
+        $this->produtos_model->delete('compativeis', 'idCompativel', $idCompativel);
+    }
 
-    $this->session->set_flashdata('success', 'Produto e modelo excluídos com sucesso!');
+    // Excluir os registros da tabela `produto_compativel`
+    $this->produtos_model->delete('produto_compativel', 'idProduto', $id);
+
+    log_info('Removeu um produto, seu modelo e modelos compatíveis. ID: ' . $id);
+
+    $this->session->set_flashdata('success', 'Produto e modelos compatíveis excluídos com sucesso!');
     redirect(site_url('produtos/gerenciar/'));
 }
+
 
 
     public function atualizar_estoque()
