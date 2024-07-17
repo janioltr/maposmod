@@ -129,17 +129,30 @@ class Produtos_model extends CI_Model
 
     // segunda modificação
     public function update_modelos_compativeis($idProduto, $modelosCompativeis) {
-        // Primeiro, removemos todas as entradas atuais para o produto
+        // Buscar os idsCompativeis atuais
+        $this->db->select('idCompativel');
+        $this->db->from('produto_compativel');
         $this->db->where('idProduto', $idProduto);
-        $this->db->delete('produto_compativel');
+        $query = $this->db->get();
+        $existingIds = array_column($query->result_array(), 'idCompativel');
     
-        // Em seguida, adicionamos as novas entradas
+        // Identificar ids a serem removidos
+        $idsToRemove = array_diff($existingIds, $modelosCompativeis);
+        if (!empty($idsToRemove)) {
+            $this->db->where('idProduto', $idProduto);
+            $this->db->where_in('idCompativel', $idsToRemove);
+            $this->db->delete('produto_compativel');
+        }
+    
+        // Adicionar novos ids
         foreach ($modelosCompativeis as $idCompativel) {
-            $data = array(
-                'idProduto' => $idProduto,
-                'idCompativel' => $idCompativel
-            );
-            $this->db->insert('produto_compativel', $data);
+            if (!in_array($idCompativel, $existingIds)) {
+                $data = array(
+                    'idProduto' => $idProduto,
+                    'idCompativel' => $idCompativel
+                );
+                $this->db->insert('produto_compativel', $data);
+            }
         }
     }
 
@@ -150,8 +163,15 @@ class Produtos_model extends CI_Model
         $this->db->join('compativeis', 'produto_compativel.idCompativel = compativeis.idCompativel');
         $this->db->where('produto_compativel.idProduto', $idProduto);
         $query = $this->db->get();
-        return $query->result();
+    
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return []; // Retorna um array vazio se não houver resultados
+        }
     }
+    
+    
     
 
 

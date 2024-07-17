@@ -113,14 +113,20 @@ public function adicionar()
     
         // Salvar os modelos compatíveis na tabela `compativeis`
         $compativelProdutos = $this->input->post('compativelProduto');
-        $idCompativeis = [];
-        foreach ($compativelProdutos as $compativelProduto) {
-            if (!empty($compativelProduto)) {
-                $compativelData = ['modeloCompativel' => $compativelProduto];
-                $this->produtos_model->add('compativeis', $compativelData);
-                $idCompativeis[] = $this->db->insert_id();
-            }
+$idCompativeis = [];
+
+if (is_array($compativelProdutos)) {
+    foreach ($compativelProdutos as $compativelProduto) {
+        if (!empty($compativelProduto)) {
+            $compativelData = ['modeloCompativel' => $compativelProduto];
+            $this->produtos_model->add('compativeis', $compativelData);
+            $idCompativeis[] = $this->db->insert_id();
         }
+    }
+} else {
+    // Tratar o caso onde $compativelProdutos não é um array
+    echo "Nenhum produto compatível foi enviado.";
+}
     
         // Preparar os dados para a tabela `produtos`
         $data = [

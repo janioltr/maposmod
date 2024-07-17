@@ -68,18 +68,10 @@
                             <input id="modeloProduto" type="text" name="modeloProduto"
                                 value="<?php echo set_value('modeloProduto'); ?>"
                                 onChange="javascript:this.value=this.value.toUpperCase();" />
+                            <button type="button" id="addCompativelProduto" class="btn btn-primary">+</button>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="compativelProduto" class="control-label">Modelo Compatível<span class="required"></span></label>
-                        <div class="controls">
-                            <input id="compativelProduto_0" type="text" name="compativelProduto[]"
-                                value="<?php echo set_value('compativelProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                            <button type="button" id="addCompativelProduto" class="btn btn-primary">Adicionar</button>
-                        </div>
-                    </div>
                     <div id="additionalCompativelProdutos"></div>
 
                     <div class="control-group">
@@ -347,13 +339,13 @@ document.getElementById('addCompativelProduto').addEventListener('click', functi
                 <input id="compativelProduto_${compativelProdutoCounter}" type="text" name="compativelProduto[]"
                     value=""
                     onChange="javascript:this.value=this.value.toUpperCase();" />
-                <button type="button" class="btn btn-danger removeCompativelProduto">Remover</button>
+                <button type="button" class="btn btn-danger removeCompativelProduto">x</button>
             </div>
         `;
         document.getElementById('additionalCompativelProdutos').appendChild(newInput);
         compativelProdutoCounter++;
     } else {
-        alert('Por favor, preencha todos os campos Modelo Compativel antes de adicionar um novo.');
+        alert('Por favor, preencha todos os campos Modelo Compatível antes de adicionar um novo.');
     }
 });
 
@@ -362,6 +354,7 @@ document.addEventListener('click', function(e) {
         e.target.parentElement.parentElement.remove();
     }
 });
+
 
 </script>
 
