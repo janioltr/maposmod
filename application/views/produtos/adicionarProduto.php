@@ -37,158 +37,187 @@
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
-                    <!-- #imagem -->
-                   
+                   <!-- #modificação 1 inicio-->
+                    <div class="span6" >
+                        <div class="widget-content nopadding tab-content" >
 
-                    <!-- #fim imagem -->
-
-
-                    
-                    <div class="control-group">
+                        <div class="control-group">
                         <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao"
                                 value="<?php echo set_value('descricao'); ?>"
                                 onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="marcaProduto" class="control-label">Marca<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="marcaProduto" type="text" name="marcaProduto"
-                                value="<?php echo set_value('marcaProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
+                        </div>
+                        <div class="control-group">
+                            <label for="marcaProduto" class="control-label">Marca<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="marcaProduto" type="text" name="marcaProduto"
+                                    value="<?php echo set_value('marcaProduto'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            <label for="modeloProduto" class="control-label">Modelo<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="modeloProduto" type="text" name="modeloProduto"
+                                    value="<?php echo set_value('modeloProduto'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                                <button type="button" id="addCompativelProduto" class="btn btn-primary">+</button>
+                            </div>
+                        </div>
+
+                        <div id="additionalCompativelProdutos"></div>
+
+                        <div class="control-group">
+                            <label for="condicaoProduto" class="control-label">Condição<span class="required"></span></label>
+                            <div class="controls">
+                                <select class="" name="condicaoProduto" id="condicaoProduto" >
+                                    <option value="Novo">Novo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Recondicionado">Recondicionado</option>
+                                    <option value="Suspeito">Suspeito</option>
+                                    <option value="Defeito">Defeito</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="direcaoProduto" class="control-label">Direção<span class="required"></span></label>
+                            <div class="controls">
+                                <select class="" name="direcaoProduto" id="direcaoProduto">
+                                    <option value="Estoque">Estoque</option>
+                                    <option value="Garantia">Garantia</option>
+                                    <option value="Pedido">Pedido</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="codigoPeca" type="text" name="codigoPeca"
+                                    value="<?php echo set_value('codigoPeca'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="numeroPeca" class="control-label">Número da Peça<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="numeroPeca" type="text" name="numeroPeca"
+                                    value="<?php echo set_value('numeroPeca'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="localizacaoProduto" type="text" name="localizacaoProduto"
+                                    value="<?php echo set_value('localizacaoProduto'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
+                            <div class="controls">
+                                <input id="nsProduto" type="text" name="nsProduto"
+                                    value="<?php echo set_value('nsProduto'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
                         </div>
                     </div>
+                    <!-- #modificação 1 final -->
+
+                    <!-- #modificação 2 inicio -->
+
+                    <div class="span6" >
+                        <div class="widget-content nopadding tab-content" >
+                            <!-- #region -->
+                            <div class="control-group">
+                                <label for="idProdutoImg" class="control-label">Anexar Imagem<span class=""></span></label>
+                                <div class="controls">
+                                    <input id="idProdutoImg" type="hidden" name="idProdutoImg" value="<?php echo set_value('idProdutoImg'); ?>" />
+                                    <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
+                                </div>
+                            </div>
+
+                            
+
+                               
 
 
-                    <div class="control-group">
-                        <label for="modeloProduto" class="control-label">Modelo<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="modeloProduto" type="text" name="modeloProduto"
-                                value="<?php echo set_value('modeloProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                            <button type="button" id="addCompativelProduto" class="btn btn-primary">+</button>
+                            <!-- #region -->
+
+                            <div class="control-group">
+                            <label class="control-label">Tipo de Movimento</label>
+                            <div class="controls">
+                                <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
+                                    <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
+                                    <span class="badge">&check;</span>
+                                </label>
+                                <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
+                                    <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
+                                    <span class="badge">&check;</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="precoCompra" class="control-label">Preço de Compra<span
+                                    class="required">*</span></label>
+                            <div class="controls">
+                                <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true"
+                                    data-thousands="" data-decimal="." type="text" name="precoCompra"
+                                    value="<?php echo set_value('precoCompra'); ?>" />
+                                Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text"
+                                    placeholder="%" maxlength="3" size="2" />
+                                <strong><span style="color: red" id="errorAlert"></span><strong>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="precoVenda" class="control-label">Preço de Venda<span
+                                    class="required">*</span></label>
+                            <div class="controls">
+                                <input id="precoVenda" class="money" data-affixes-stay="true" data-thousands=""
+                                    data-decimal="." type="text" name="precoVenda"
+                                    value="<?php echo set_value('precoVenda'); ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
+                            <div class="controls">
+                                <select id="unidade" name="unidade" style="width: 15em;"></select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="estoque" type="text" name="estoque"
+                                    value="<?php echo set_value('estoque'); ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
+                            <div class="controls">
+                                <input id="estoqueMinimo" type="text" name="estoqueMinimo"
+                                    value="<?php echo set_value('estoqueMinimo'); ?>" />
+                            </div>
+                        </div>
+
                         </div>
                     </div>
-
-                    <div id="additionalCompativelProdutos"></div>
-
-                    <div class="control-group">
-                        <label for="condicaoProduto" class="control-label">Condição<span class="required"></span></label>
-                        <div class="controls">
-                            <select class="" name="condicaoProduto" id="condicaoProduto" >
-                                <option value="Novo">Novo</option>
-                                <option value="Usado">Usado</option>
-                                <option value="Recondicionado">Recondicionado</option>
-                                <option value="Suspeito">Suspeito</option>
-                                <option value="Defeito">Defeito</option>
-                            </select>
-                        </div>
                     </div>
                     
-                    <div class="control-group">
-                        <label for="direcaoProduto" class="control-label">Direção<span class="required"></span></label>
-                        <div class="controls">
-                            <select class="" name="direcaoProduto" id="direcaoProduto">
-                                <option value="Estoque">Estoque</option>
-                                <option value="Garantia">Garantia</option>
-                                <option value="Pedido">Pedido</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="codigoPeca" type="text" name="codigoPeca"
-                                value="<?php echo set_value('codigoPeca'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="numeroPeca" class="control-label">Número da Peça<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="numeroPeca" type="text" name="numeroPeca"
-                                value="<?php echo set_value('numeroPeca'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="localizacaoProduto" type="text" name="localizacaoProduto"
-                                value="<?php echo set_value('localizacaoProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
-                        <div class="controls">
-                            <input id="nsProduto" type="text" name="nsProduto"
-                                value="<?php echo set_value('nsProduto'); ?>"
-                                onChange="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Tipo de Movimento</label>
-                        <div class="controls">
-                            <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
-                                <input type="checkbox" id="entrada" name="entrada" class="badgebox" value="1" checked>
-                                <span class="badge">&check;</span>
-                            </label>
-                            <label for="saida" class="btn btn-default" style="margin-top: 5px;">Saída
-                                <input type="checkbox" id="saida" name="saida" class="badgebox" value="1" checked>
-                                <span class="badge">&check;</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="precoCompra" class="control-label">Preço de Compra<span
-                                class="required">*</span></label>
-                        <div class="controls">
-                            <input style="width: 9em;" id="precoCompra" class="money" data-affixes-stay="true"
-                                data-thousands="" data-decimal="." type="text" name="precoCompra"
-                                value="<?php echo set_value('precoCompra'); ?>" />
-                            Margem <input style="width: 3em;" id="margemLucro" name="margemLucro" type="text"
-                                placeholder="%" maxlength="3" size="2" />
-                            <strong><span style="color: red" id="errorAlert"></span><strong>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="precoVenda" class="control-label">Preço de Venda<span
-                                class="required">*</span></label>
-                        <div class="controls">
-                            <input id="precoVenda" class="money" data-affixes-stay="true" data-thousands=""
-                                data-decimal="." type="text" name="precoVenda"
-                                value="<?php echo set_value('precoVenda'); ?>" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
-                        <div class="controls">
-                            <select id="unidade" name="unidade" style="width: 15em;"></select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
-                        <div class="controls">
-                            <input id="estoque" type="text" name="estoque"
-                                value="<?php echo set_value('estoque'); ?>" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
-                        <div class="controls">
-                            <input id="estoqueMinimo" type="text" name="estoqueMinimo"
-                                value="<?php echo set_value('estoqueMinimo'); ?>" />
-                        </div>
-                    </div>
+                    <!-- #modificação 2 final -->
+                    
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3" style="display: flex;justify-content: center">
