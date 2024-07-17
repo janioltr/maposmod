@@ -12,12 +12,7 @@
             <div class="widget-content">
                 <table class="table table-bordered">
                     <tbody>
-                        <tr>
-                            <td style="text-align: right; width: 30%"><strong>Código de Barra</strong></td>
-                            <td>
-                                <?php echo $result->codDeBarra ?>
-                            </td>
-                        </tr>
+                        
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Produto</strong></td>
                             <td>
@@ -38,6 +33,58 @@
                                 <?php echo $result->nomeModelo ?>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Compatíveis</strong></td>
+                            <td>
+                                <?php if (!empty($modelosCompativeis)) : ?>
+                                    <ul>
+                                        <?php foreach ($modelosCompativeis as $modeloCompativel) : ?>
+                                            <li><?php echo $modeloCompativel->modeloCompativel; ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else : ?>
+                                    <p>Nenhum modelo compatível encontrado.</p>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Condição</strong></td>
+                            <td>
+                                <?php echo $result->descricaoCondicao ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Direcionado</strong></td>
+                            <td>
+                                <?php echo $result->descricaoDirecao ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Codigo da peça</strong></td>
+                            <td>
+                                <?php echo $result->codigoPeca ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Número da peça</strong></td>
+                            <td>
+                                <?php echo $result->numeroPeca ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right; width: 30%"><strong>Localização</strong></td>
+                            <td>
+                                <?php echo $result->localizacaoProduto ?>
+                            </td>
+                        </tr>
+
+
 
                         <tr>
                             <td style="text-align: right; width: 30%"><strong>Número de Série</strong></td>

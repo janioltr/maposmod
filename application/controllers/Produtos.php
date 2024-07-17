@@ -279,27 +279,32 @@ if (is_array($compativelProdutos)) {
 
 
     public function visualizar()
-    {
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
-            redirect(base_url());
-        }
-
-        $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
-
-        if ($this->data['result'] == null) {
-            $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
-        }
-
-        $this->data['view'] = 'produtos/visualizarProduto';
-        return $this->layout();
+{
+    if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
+        $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
+        redirect('mapos');
     }
+
+    if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
+        $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
+        redirect(base_url());
+    }
+
+    $produtoId = $this->uri->segment(3);
+    $this->data['result'] = $this->produtos_model->getById($produtoId);
+
+    if ($this->data['result'] == null) {
+        $this->session->set_flashdata('error', 'Produto não encontrado.');
+        redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
+    }
+
+    // Buscar modelos compatíveis
+    $this->data['modelosCompativeis'] = $this->produtos_model->get_modelos_compativeis($produtoId);
+
+    $this->data['view'] = 'produtos/visualizarProduto';
+    return $this->layout();
+}
+
 
     public function excluir()
 {
