@@ -24,6 +24,85 @@
     /* Move the check mark back when checked */
     text-indent: 0;
 }
+
+.form-horizontal .control-group {
+        border-bottom: 1px solid #ffffff;
+    }
+
+    .form-horizontal .controls {
+        margin-left: 20px;
+        padding-bottom: 8px 0;
+    }
+
+    .form-horizontal .control-label {
+        text-align: left;
+        padding-top: 15px;
+    }
+
+    .nopadding {
+        padding: 0 20px !important;
+        margin-right: 20px;
+    }
+
+    .widget-title h5 {
+        padding-bottom: 30px;
+        text-align-last: left;
+        font-size: 2em;
+        font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+        form {
+            display: contents !important;
+        }
+
+        .form-horizontal .control-label {
+            margin-bottom: -6px;
+        }
+
+        .btn-xs {
+            position: initial !important;
+        }
+    }
+/* meus  */  
+
+.image-slider {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* Ajuste conforme necessário */
+    margin: 10px;
+}
+
+.image-slider img {
+    width: 100%;
+    height: 100%;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: blue;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+
 </style>
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
@@ -38,11 +117,11 @@
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
                    <!-- #modificação 1 inicio-->
-                    <div class="span6" >
-                        <div class="widget-content nopadding tab-content" >
+                    <div class="span4" >
+                        <div class="" >
 
                         <div class="control-group">
-                        <label for="descricao" class="control-label">Produto<span class="required">*</span></label>
+                        <label for="descricao" class="control-label">Produto / Peça <span class="required">*</span></label>
                         <div class="controls">
                             <input id="descricao" type="text" name="descricao"
                                 value="<?php echo set_value('descricao'); ?>"
@@ -72,52 +151,10 @@
                         <div id="additionalCompativelProdutos"></div>
 
                         <div class="control-group">
-                            <label for="condicaoProduto" class="control-label">Condição<span class="required"></span></label>
-                            <div class="controls">
-                                <select class="" name="condicaoProduto" id="condicaoProduto" >
-                                    <option value="Novo">Novo</option>
-                                    <option value="Usado">Usado</option>
-                                    <option value="Recondicionado">Recondicionado</option>
-                                    <option value="Suspeito">Suspeito</option>
-                                    <option value="Defeito">Defeito</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="control-group">
-                            <label for="direcaoProduto" class="control-label">Direção<span class="required"></span></label>
-                            <div class="controls">
-                                <select class="" name="direcaoProduto" id="direcaoProduto">
-                                    <option value="Estoque">Estoque</option>
-                                    <option value="Garantia">Garantia</option>
-                                    <option value="Pedido">Pedido</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>
                             <div class="controls">
                                 <input id="codigoPeca" type="text" name="codigoPeca"
                                     value="<?php echo set_value('codigoPeca'); ?>"
-                                    onChange="javascript:this.value=this.value.toUpperCase();" />
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="numeroPeca" class="control-label">Número da Peça<span class="required">*</span></label>
-                            <div class="controls">
-                                <input id="numeroPeca" type="text" name="numeroPeca"
-                                    value="<?php echo set_value('numeroPeca'); ?>"
-                                    onChange="javascript:this.value=this.value.toUpperCase();" />
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
-                            <div class="controls">
-                                <input id="localizacaoProduto" type="text" name="localizacaoProduto"
-                                    value="<?php echo set_value('localizacaoProduto'); ?>"
                                     onChange="javascript:this.value=this.value.toUpperCase();" />
                             </div>
                         </div>
@@ -131,31 +168,51 @@
                             </div>
                         </div>
 
+                        <div class="control-group">
+                            <label for="condicaoProduto" class="control-label">Condições do Produto<span class="required"></span></label>
+                            <div class="controls">
+                                <select class="" name="condicaoProduto" id="condicaoProduto" >
+                                    <option value="Novo">Novo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Recondicionado">Recondicionado</option>
+                                    <option value="Suspeito">Suspeito</option>
+                                    <option value="Defeito">Defeito</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
+                            <div class="controls">
+                                <input id="localizacaoProduto" type="text" name="localizacaoProduto"
+                                    value="<?php echo set_value('localizacaoProduto'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
                         </div>
                     </div>
                     <!-- #modificação 1 final -->
 
                     <!-- #modificação 2 inicio -->
 
-                    <div class="span6" >
-                        <div class="widget-content nopadding tab-content" >
-                            <!-- #region -->
-                            <div class="control-group">
-                                <label for="idProdutoImg" class="control-label">Anexar Imagem<span class=""></span></label>
-                                <div class="controls">
-                                    <input id="idProdutoImg" type="hidden" name="idProdutoImg" value="<?php echo set_value('idProdutoImg'); ?>" />
-                                    <input type="file" class="span12" name="userfile[]" multiple="multiple" size="20" />
-                                </div>
+                    <div class="span4" >
+                        <div class="" >
+
+                        
+
+                        <div class="control-group">
+                            <label for="direcaoProduto" class="control-label">Direcionado (a)<span class="required"></span></label>
+                            <div class="controls">
+                                <select class="" name="direcaoProduto" id="direcaoProduto">
+                                    <option value="Estoque">Estoque</option>
+                                    <option value="Garantia">Garantia</option>
+                                    <option value="Pedido">Pedido</option>
+                                </select>
                             </div>
+                        </div>
 
-                            
-
-                               
-
-
-                            <!-- #region -->
-
-                            <div class="control-group">
+                        <div class="control-group">
                             <label class="control-label">Tipo de Movimento</label>
                             <div class="controls">
                                 <label for="entrada" class="btn btn-default" style="margin-top: 5px;">Entrada
@@ -212,8 +269,32 @@
                             </div>
                         </div>
 
+                        <div class="control-group">
+                            <label for="numeroPeca" class="control-label">Observação<span class="required"></span></label>
+                            <div class="controls">
+                                <input id="numeroPeca" type="text" name="numeroPeca"
+                                    value="<?php echo set_value('numeroPeca'); ?>"
+                                    onChange="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
                         </div>
+
+                      </div>
                     </div>
+
+
+                    <div class="span4">
+                            <div>
+                            <div class="control-group">
+                                <label for="imgProduto" class="control-label"><span class="required"></span></label>
+                                <div class="controls">
+                                    <div class="image-slider">
+                                        <span class="prev" onclick="changeImage(-1)">❮</span>
+                                        <img id="imgProduto" src="https://encurtador.com.br/1Nwzd" alt="Imagem do Produto" />
+                                        <span class="next" onclick="changeImage(1)">❯</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
                     </div>
                     
                     <!-- #modificação 2 final -->
@@ -385,6 +466,26 @@ document.addEventListener('click', function(e) {
 });
 
 
+</script>
+
+
+<script>
+let currentImageIndex = 0;
+const images = [
+    "https://encurtador.com.br/nAudQ",
+    "https://encurtador.com.br/1Nwzd",
+    "https://encurtador.com.br/nAudQ"
+];
+
+function changeImage(direction) {
+    currentImageIndex += direction;
+    if (currentImageIndex >= images.length) {
+        currentImageIndex = 0;
+    } else if (currentImageIndex < 0) {
+        currentImageIndex = images.length - 1;
+    }
+    document.getElementById("imgProduto").src = images[currentImageIndex];
+}
 </script>
 
 

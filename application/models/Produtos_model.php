@@ -110,7 +110,7 @@ class Produtos_model extends CI_Model
 
     // modificações
 
-    public function anexar($produtos, $anexo, $url, $thumb, $path)
+    public function imgAnexar($produtos, $anexo, $url, $thumb, $path)
     {
         $this->db->set('anexo', $anexo);
         $this->db->set('url', $url);

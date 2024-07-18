@@ -66,8 +66,6 @@ class Produtos extends MY_Controller
 }
 
 
-         
-
 
 public function adicionar()
 {
@@ -154,13 +152,20 @@ if (is_array($compativelProdutos)) {
         if ($this->produtos_model->add('produtos', $data) == true) {
             // Adicionar os modelos compatíveis na tabela `produto_compativel`
             $idProduto = $this->db->insert_id();
+
+            // Passar o ID do produto para a variável idProdutoImg
+            $idProdutoImg = $idProduto;
             foreach ($idCompativeis as $idCompativel) {
                 $produtoCompativelData = [
                     'idProduto' => $idProduto,
                     'idCompativel' => $idCompativel
+                    
                 ];
                 $this->produtos_model->add('produto_compativel', $produtoCompativelData);
             }
+
+            
+            $this->imgAnexar($idProdutoImg);
 
             $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
             log_info('Adicionou um produto');
@@ -381,97 +386,87 @@ if (is_array($compativelProdutos)) {
 
     // modificações
 
-    public function anexar()
-    {
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-
-        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('produto_id');
-
-        // If it exist, check if it's a directory
-        if (!is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
-            // make directory for images and thumbs
-            try {
-                mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true);
-            } catch (Exception $e) {
-                echo json_encode(['result' => false, 'mensagem' => $e->getMessage()]);
-                die();
-            }
+    public function imgAnexar()
+{
+    $this->load->library('upload');
+    $this->load->library('image_lib');
+    $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('idProdutoImg');
+    if (!is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
+        // make directory for images and thumbs
+        try {
+            mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true);
+        } catch (Exception $e) {
+            echo json_encode(['result' => false, 'mensagem' => $e->getMessage()]);
+            die();
         }
+    }
+    $upload_conf = [
+        'upload_path' => $directory,
+        'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
+        'max_size' => 0,
+    ];
+    $this->upload->initialize($upload_conf);
 
-        $upload_conf = [
-            'upload_path' => $directory,
-            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de Produto
-            'max_size' => 0,
-        ];
-
-        $this->upload->initialize($upload_conf);
-
-        foreach ($_FILES['userfile'] as $key => $val) {
-            $i = 1;
-            foreach ($val as $v) {
-                $field_name = "file_" . $i;
-                $_FILES[$field_name][$key] = $v;
-                $i++;
-            }
+    if (isset($_FILES['userfile'])) {
+        $files = $_FILES['userfile'];
+        $file_count = count($files['name']);
+        for ($i = 0; $i < $file_count; $i++) {
+            $_FILES['file_' . $i] = [
+                'name' => $files['name'][$i],
+                'type' => $files['type'][$i],
+                'tmp_name' => $files['tmp_name'][$i],
+                'error' => $files['error'][$i],
+                'size' => $files['size'][$i],
+            ];
         }
         unset($_FILES['userfile']);
+    }
 
-        $error = [];
-        $success = [];
-
-        foreach ($_FILES as $field_name => $file) {
-            if (!$this->upload->do_upload($field_name)) {
-                $error['upload'][] = $this->upload->display_errors();
-            } else {
-                $upload_data = $this->upload->data();
-        
-                // Gera um nome de arquivo aleatório mantendo a extensão original
-                $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
-                $new_file_path = $upload_data['file_path'] . $new_file_name;
-        
-                rename($upload_data['full_path'], $new_file_path);
-        
-                if ($upload_data['is_image'] == 1) {
-                    $resize_conf = [
-                        'source_image' => $new_file_path,
-                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
-                        'width' => 200,
-                        'height' => 125,
-                    ];
-        
-                    $this->image_lib->initialize($resize_conf);
-        
-                    if (!$this->image_lib->resize()) {
-                        $error['resize'][] = $this->image_lib->display_errors();
-                    } else {
-                        $success[] = $upload_data;
-                        $this->load->model('produtos_model');
-                        $result = $this->produtos_model->anexar($this->input->post('produto_id'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('produto_id')), 'thumb_' . $new_file_name, $directory);
-                        if (!$result) {
-                            $error['db'][] = 'Erro ao inserir no banco de dados.';
-                        }
-                    }
+    $error = [];
+    $success = [];
+    foreach ($_FILES as $field_name => $file) {
+        if (!$this->upload->do_upload($field_name)) {
+            $error['upload'][] = $this->upload->display_errors();
+        } else {
+            $upload_data = $this->upload->data();
+            $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
+            $new_file_path = $upload_data['file_path'] . $new_file_name;
+            rename($upload_data['full_path'], $new_file_path);
+            if ($upload_data['is_image'] == 1) {
+                $resize_conf = [
+                    'source_image' => $new_file_path,
+                    'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
+                    'width' => 200,
+                    'height' => 125,
+                ];
+                $this->image_lib->initialize($resize_conf);
+                if (!$this->image_lib->resize()) {
+                    $error['resize'][] = $this->image_lib->display_errors();
                 } else {
                     $success[] = $upload_data;
-        
-                    $this->load->model('produtos_model');
-        
-                    $result = $this->produtos_model->anexar($this->input->post('produto_id'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('produto_id')), '', $directory);
+                    $this->load->model('Produtos_model');
+                    $result = $this->Produtos_model->imgAnexar($this->input->post('idProdutoImg'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('$idProdutoImg')), 'thumb_' . $new_file_name, $directory);
                     if (!$result) {
                         $error['db'][] = 'Erro ao inserir no banco de dados.';
                     }
                 }
+            } else {
+                $success[] = $upload_data;
+                $this->load->model('Produtos_model');
+                $result = $this->Produtos_model->imgAnexar($this->input->post('idProdutoImg'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('idProdutoImg')), '', $directory);
+                if (!$result) {
+                    $error['db'][] = 'Erro ao inserir no banco de dados.';
+                }
             }
         }
-        
-        if (count($error) > 0) {
-            echo json_encode(['result' => false, 'mensagem' => 'Ocorreu um erro ao processar os arquivos.', 'errors' => $error]);
-        } else {
-            log_info('Adicionou anexo(s) a um Produto. ID (Produto): ' . $this->input->post('produto_id'));
-            echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
-        }
     }
+    if (count($error) > 0) {
+        echo json_encode(['result' => false, 'mensagem' => 'Ocorreu um erro ao processar os arquivos.', 'errors' => $error]);
+    } else {
+        log_info('Adicionou imagen(s) a um Produto. ID (Produto): ' . $this->input->post('idProdutoImg'));
+        echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
+    }
+}
 
 
 }
