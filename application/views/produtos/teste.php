@@ -1,4 +1,4 @@
-<?
+<
 <style>
 /* Hiding the checkbox, but allowing it to be focused */
 .badgebox {
