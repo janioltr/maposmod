@@ -280,9 +280,9 @@
                                         </div>
                                         </div>
                                         <!-- #region -->
-                                         <div>
+                                        <div>
 
-                                         <div class="span8 control-group">
+                                        <div class="span8 control-group">
                                             <div class="span12" >
                                             <label for="precoCompra" class="control-label">Preço de Compra<span
                                                     class="required">*</span></label>
@@ -572,3 +572,21 @@ function nextImage() {
     }
 }
 </script>
+
+
+<script>
+        $(document).ready(function() {
+            $('.money').maskMoney({
+                prefix: '',
+                allowNegative: false,
+                thousands: '',
+                decimal: '.',
+                affixesStay: true
+            });
+
+            // Forçar a aplicação da máscara ao focar no campo (para dispositivos móveis)
+            $('.money').on('focus', function() {
+                $(this).maskMoney('mask');
+            });
+        });
+    </script>
