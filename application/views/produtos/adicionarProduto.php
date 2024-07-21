@@ -285,7 +285,7 @@
                                         <!-- #region -->
                                         <div>
 
-                                        <div class="span8 control-group">
+                                        <div class="span7 control-group">
                                             <div class="span12" >
                                             <label for="precoCompra" class="control-label">Preço de Compra<span
                                                     class="required">*</span></label>
@@ -298,28 +298,24 @@
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <div class="span4 control-group">
+                                        <div >
+                                            <div class="span5 control-group">
                                                 <div class="span12" >
-                                                <label for="margemLucro" class="control-label">Margem</label>
+                                                <label for="margemLucro" class="control-label span12">Margem</label>
                                                     <div class="span12" >
                                                         <input class="span12" id="margemLucro" name="margemLucro" type="text"
                                                         placeholder="%" maxlength="3" size="2" />
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
 
                                         
 
-
-                                            
-
-
-
                                          </div>
                                     <div>
-                                    </div>
+                                </div>
                                     <strong><span style="color: red" id="errorAlert"></span><strong></strong>
                                     <div class="control-group">
                                         <label for="precoVenda" class="control-label">Preço de Venda<span
