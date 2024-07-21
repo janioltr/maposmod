@@ -147,7 +147,7 @@
                                     <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
                                         <div class="span10">
                                             <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-                                            <label for="userfile">Anexo</label>
+                                            <label for="userfile"></label>
                                             <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImages(event)" />
                                         </div>
                                     </div>

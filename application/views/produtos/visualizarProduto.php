@@ -284,11 +284,7 @@
                             }
                             ?>
                         </div>
-                            <!-- #region -->
-
-                            
                         </div>
-                        <!-- #region -->
                     </tbody>
                 </table>
                </div>
@@ -316,4 +312,7 @@ function changeImage(direction) {
     document.getElementById("imgProduto").src = images[currentImageIndex];
 }
 </script>
+
+
+
 
