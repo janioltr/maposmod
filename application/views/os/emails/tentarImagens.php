@@ -1,307 +1,64 @@
 <?
 
-<div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
-    <div class="span10">
-        <label for="userfile">Anexo</label>
-        <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImage(event)" />
-    </div>
-    <div class="span3" style="min-height: 150px; margin-left: 0">
-        <img id="preview" src="#" alt="Pré-visualização da Imagem" style="display: none; max-height: 150px;" />
-    </div>
-</div>
+public function excluir()
+{
+    if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
+        $this->session->set_flashdata('error', 'Você não tem permissão para excluir produtos.');
+        redirect(base_url());
+    }
 
-<script>
-function previewImage(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-        var output = document.getElementById('preview');
-        output.src = reader.result;
-        output.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
+    $id = $this->input->post('id');
+    if ($id == null) {
+        $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
+        redirect(base_url() . 'index.php/produtos/gerenciar/');
+    }
 
+    // Obter o idModelo antes de excluir o produto
+    $produto = $this->produtos_model->getById($id);
+    $idModelo = $produto->idModelo;
 
+    // Obter os ids dos modelos compatíveis
+    $modelosCompativeis = $this->produtos_model->get_modelos_compativeis($id);
+    $idCompativeis = array_map(function($modelo) {
+        return $modelo->idCompativel;
+    }, $modelosCompativeis);
 
+    // Excluir os registros das tabelas relacionadas
+    $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
+    $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
+    $this->produtos_model->delete('produtos', 'idProdutos', $id);
 
+    // Excluir o modelo da tabela `modelo`
+    $this->produtos_model->delete('modelo', 'idModelo', $idModelo);
 
+    // Excluir os modelos compatíveis da tabela `compativeis`
+    foreach ($idCompativeis as $idCompativel) {
+        $this->produtos_model->delete('compativeis', 'idCompativel', $idCompativel);
+    }
 
+    // Excluir os registros da tabela `produto_compativel`
+    $this->produtos_model->delete('produto_compativel', 'idProduto', $id);
 
-<div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-    <div class="span10">
-        <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-        <label for="userfile">Anexo</label>
-        <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImage(event)" />
-    </div>
-    <div class="span3" style="min-height: 150px; margin-left: 0">
-        <img id="preview" src="#" alt="Pré-visualização da Imagem" style="display: none; max-height: 150px;" />
-    </div>
-</div>
-
-<script>
-function previewImage(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-        var output = document.getElementById('preview');
-        output.src = reader.result;
-        output.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
-
-
-
-
-<div id="formAnexos"  action="javascript:;"
-    accept-charset="utf-8" s method="post">
-    <div class="span10">
-        <input type="hidden" name="idProdutoImg" id="idProdutoImg"
-            value="" />
-        <label for="">Anexo</label>
-        <input type="file" class="span12" name="userfile[]" multiple="multiple"
-            size="20" />
-    </div>
-
-    </div>
-
-
-
-
-    <div class="control-group">
-    <div>
-    <div class="span12">
-        <div class="span12" style="min-height: 200px; margin-left: 0">
-            <img id="preview" src="#" alt="Pré-visualização da Imagem" style="display: none; max-height: 200px;" />
-        </div>
-    </div>
- <!-- #region -->
-  <div class="span9" >
-    <div class="span11" >
-
-    <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-        <div class="span10">
-            <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-            <label for="userfile">Anexo</label>
-            <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImage(event)" />
-        </div>
+    // Excluir as imagens vinculadas ao produto
+    $imagens = $this->produtos_model->getImagensProduto($id);
+    foreach ($imagens as $imagem) {
+        $imagemPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . $imagem->anexo;
+        $thumbPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $imagem->thumb;
         
-    </div>
-
-    </div>
-</div>
-
-</div>
-
- /// bom
-
-<div class="control-group span12">
-    <div class="span12 div-teste " >
-        <div>
-            <div class="span12" style="">
-                <img id="preview" src="#" alt="Pré-visualização da Imagem" style="" />
-            </div>
-        </div>
+        if (file_exists($imagemPath)) {
+            unlink($imagemPath);
+        }
+        if (file_exists($thumbPath)) {
+            unlink($thumbPath);
+        }
         
-    </div>
-    <div>
-        <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-            <div class="span10">
-                <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-                <label for="userfile"></label>
-                <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImage(event)" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function previewImage(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-        var output = document.getElementById('preview');
-        output.src = reader.result;
-        output.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
-
-
-
-
-
-
-///////////////////
-
-<div class="control-group span12">
-    <div class="span12 div-teste">
-        <div class="span12" style="position: relative; text-align: center;">
-            <button id="prevBtn" onclick="prevImage()" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">Anterior</button>
-            <img id="preview" src="assets/img/produtoIcon.jpg" alt="Pré-visualização da Imagem" style="max-height: 300px; width: auto;" />
-            <button id="nextBtn" onclick="nextImage()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">Próxima</button>
-        </div>
-    </div>
-    <div>
-        <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-            <div class="span10">
-                <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-                <label for="userfile">Anexo</label>
-                <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImages(event)" />
-            </div>
-        </div>
-    </div>
-</div>
-
-
-let currentImageIndex = 0;
-let images = [];
-
-function previewImages(event) {
-    images = [];
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            images.push(e.target.result);
-            if (i === 0) {
-                document.getElementById('preview').src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(files[i]);
+        $this->produtos_model->delete('imagens_produto', 'idImagem', $imagem->idImagem);
     }
+
+    log_info('Removeu um produto, seu modelo, modelos compatíveis e imagens. ID: ' . $id);
+
+    $this->session->set_flashdata('success', 'Produto, modelos compatíveis e imagens excluídos com sucesso!');
+    redirect(site_url('produtos/gerenciar/'));
 }
 
-function prevImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-
-function nextImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-
-
-
-////////////////////
-
-<div class="control-group span12">
-    <div class="span12 div-teste">
-        <div class="span12" style="position: relative; text-align: center;">
-            <button id="prevBtn" onclick="prevImage()" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">Anterior</button>
-            <img id="preview" src="<?php echo base_url('assets/img/produtoIcon.jpg'); ?>" alt="Pré-visualização da Imagem" style="max-height: 300px; width: auto;" />
-            <button id="nextBtn" onclick="nextImage()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">Próxima</button>
-        </div>
-    </div>
-    <div>
-        <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-            <div class="span10">
-                <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-                <label for="userfile">Anexo</label>
-                <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImages(event)" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-let currentImageIndex = 0;
-let images = [];
-
-function previewImages(event) {
-    images = [];
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            images.push(e.target.result);
-            if (i === 0) {
-                document.getElementById('preview').src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(files[i]);
-    }
-}
-
-function prevImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-
-function nextImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-</script>
-
-
-
-
-
-
-
-//////////////
-
-<div class="control-group span12">
-    <div class="span12 ">
-        <div class="span12" style="position: relative; text-align: center;">
-            <button id="prevBtn" onclick="prevImage()" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">Anterior</button>
-            <img id="preview" src="<?php echo base_url('assets/img/produtoIcon.jpg'); ?>" alt="Pré-visualização da Imagem" style="max-height: 300px; width: auto; margin-top: 20px;" />
-            <button id="nextBtn" onclick="nextImage()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">Próxima</button>
-        </div>
-    </div>
-    <div>
-        <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
-            <div class="span10">
-                <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
-                <label for="userfile">Anexo</label>
-                <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImages(event)" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-let currentImageIndex = 0;
-let images = [];
-
-function previewImages(event) {
-    images = [];
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            images.push(e.target.result);
-            if (i === 0) {
-                document.getElementById('preview').src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(files[i]);
-    }
-}
-
-function prevImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-
-function nextImage() {
-    if (images.length > 0) {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        document.getElementById('preview').src = images[currentImageIndex];
-    }
-}
-</script>
 

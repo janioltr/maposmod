@@ -317,7 +317,7 @@ public function adicionar()
 
 
 
-    public function excluir()
+public function excluir()
 {
     if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
         $this->session->set_flashdata('error', 'Você não tem permissão para excluir produtos.');
@@ -356,11 +356,28 @@ public function adicionar()
     // Excluir os registros da tabela `produto_compativel`
     $this->produtos_model->delete('produto_compativel', 'idProduto', $id);
 
-    log_info('Removeu um produto, seu modelo e modelos compatíveis. ID: ' . $id);
+    // Excluir as imagens vinculadas ao produto
+    $imagens = $this->produtos_model->getImagensProduto($id);
+    foreach ($imagens as $imagem) {
+        $imagemPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . $imagem->anexo;
+        $thumbPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $imagem->thumb;
+        
+        if (file_exists($imagemPath)) {
+            unlink($imagemPath);
+        }
+        if (file_exists($thumbPath)) {
+            unlink($thumbPath);
+        }
+        
+        $this->produtos_model->delete('imagens_produto', 'idImagem', $imagem->idImagem);
+    }
 
-    $this->session->set_flashdata('success', 'Produto e modelos compatíveis excluídos com sucesso!');
+    log_info('Removeu um produto, seu modelo, modelos compatíveis e imagens. ID: ' . $id);
+
+    $this->session->set_flashdata('success', 'Produto, modelos compatíveis e imagens excluídos com sucesso!');
     redirect(site_url('produtos/gerenciar/'));
 }
+
 
 
 
@@ -408,7 +425,7 @@ public function adicionar()
     }
     $upload_conf = [
         'upload_path' => $directory,
-        'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
+        'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG', // formatos permitidos para anexos de os
         'max_size' => 0,
     ];
     $this->upload->initialize($upload_conf);

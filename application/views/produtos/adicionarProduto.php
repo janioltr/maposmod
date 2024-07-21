@@ -64,42 +64,37 @@
             position: initial !important;
         }
     }
-/* meus  */  
+/* meus  */
 
-.image-slider {
-    position: relative;
-    width: 100%;
-    max-width: 500px; /* Ajuste conforme necessário */
-    margin: 10px;
-}
-
-.image-slider img {
-    width: 100%;
-    height: 100%;
-}
-
-.prev, .next {
-    cursor: pointer;
+.image-nav-btn {
     position: absolute;
     top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: blue;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
+    transform: translateY(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.next {
+.image-nav-btn:hover {
+    background-color: #0056b3;
+}
+
+#prevBtn {
+    left: 0;
+}
+
+#nextBtn {
     right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
 }
 
 .div-bord {
@@ -116,9 +111,13 @@
 
 
 </style>
+
+
+
 <div class="row-fluid" style="margin-top:0">
     <div class="span12">
-        <div class="widget-box">
+        <div
+         class="widget-box">
             <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon">
                     <i class="fas fa-shopping-bag"></i>
@@ -132,13 +131,16 @@
                      <div class="span12 div-teste">
                         <div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1" >
-                                               
                             <div class="control-group span12">
-                                <div class="span12 ">
+                                <div class="span12">
                                     <div class="span12" style="position: relative; text-align: center;">
-                                        <button id="prevBtn" onclick="prevImage()" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">Anterior</button>
+                                        <button id="prevBtn" type="button" onclick="prevImage()" class="image-nav-btn">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
                                         <img id="preview" src="<?php echo base_url('assets/img/produtoIcon.jpg'); ?>" alt="Pré-visualização da Imagem" style="max-height: 300px; width: auto; margin-top: 20px;" />
-                                        <button id="nextBtn" onclick="nextImage()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">Próxima</button>
+                                        <button id="nextBtn" type="button" onclick="nextImage()" class="image-nav-btn">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div>
@@ -151,7 +153,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             </div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1">
                                         <div class="control-group">
@@ -170,8 +171,6 @@
                                                     onChange="javascript:this.value=this.value.toUpperCase();" />
                                             </div>
                                         </div>
-
-
                                         <div class="control-group">
                                             <label for="modeloProduto" class="control-label">Modelo<span class="required">*</span></label>
                                             <div class="controls">
@@ -181,12 +180,9 @@
                                                 <button type="button" id="addCompativelProduto" class=" span2 btn btn-primary">+</button>
                                             </div>
                                         </div>
-
                                         <div id="additionalCompativelProdutos"></div>
-
                             </div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1" >
-                                
                                 <div class=" control-group">
                                     <label for="codigoPeca" class="control-label">Código da Peça<span class="required">*</span></label>
                                     <div class="controls">
@@ -195,7 +191,6 @@
                                             onChange="javascript:this.value=this.value.toUpperCase();" />
                                     </div>
                                 </div>
-
                                 <div class="control-group">
                                     <label for="nsProduto" class="control-label">Número de Série<span class=""></span></label>
                                     <div class="controls">
@@ -218,7 +213,6 @@
                                                 </select>
                                             </div>
                                         </div>
-
                                         <div class="control-group">
                                             <label for="direcaoProduto" class="control-label">Direcionado (a)<span class="required"></span></label>
                                             <div class="controls">
@@ -230,7 +224,6 @@
                                             </div>
                                             </div>
                                         </div>
-
                                         <div class="control-group">
                                                     <label for="localizacaoProduto" class="control-label">Localização<span class="required">*</span></label>
                                                     <div class="controls">
@@ -239,13 +232,8 @@
                                                             onChange="javascript:this.value=this.value.toUpperCase();" />
                                                     </div>
                                         </div>
-
-                                        
                                     </div>
                             </div>
-
-
-                                <!-- #region -->
                                 <div class="span3 div-bord" style="padding: 1%; margin-left: 1" >
 
                                         <div class="span12 control-group">
@@ -263,7 +251,6 @@
                                             </div>
                                             </div>
                                         </div>
-
                                         <div >
                                         <div class="span12 control-group">
                                             <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
@@ -272,7 +259,6 @@
                                             </div>
                                         </div>
                                         </div>
-
                                         <div>
                                         <div class="span12 control-group">
                                             <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
@@ -282,9 +268,6 @@
                                             </div>
                                         </div>
                                         </div>
-
-                                        
-
                                         <div>
                                         <div class="span12 control-group">
                                             <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
@@ -294,14 +277,6 @@
                                             </div>
                                         </div>
                                         </div>
-
-
-                                        <!-- #region -->
-
-                                        
-
-                                        <!-- #region -->
-
                                         <div>
                                     <div class="span12">
                                         <div class="span12">
@@ -312,29 +287,17 @@
                                                     <input  id="precoCompra" class="money span12" data-affixes-stay="true"
                                                         data-thousands="" data-decimal="." type="text" name="precoCompra"
                                                         value="<?php echo set_value('precoCompra'); ?>" />
-                                                    
                                                 </div>
-                                                
                                             </div>
-                                            
                                             <div class="span4" >
                                             <div class="span12" >
                                             <label for="margemLucro" class="control-label">Margem</label>
                                                 <input class="span12" id="margemLucro" name="margemLucro" type="text"
                                                     placeholder="%" maxlength="3" size="2" />
-                                                
                                         </div>
-
                                         </div>
-                                        
-                                        
-
-
                                         </div>
-
-                                        
                                         <strong><span style="color: red" id="errorAlert"></span><strong></strong>
-
                                         <div class="control-group">
                                             <label for="precoVenda" class="control-label">Preço de Venda<span
                                                     class="required">*</span></label>
@@ -344,22 +307,11 @@
                                                     value="<?php echo set_value('precoVenda'); ?>" />
                                             </div>
                                         </div>
-
-                                        
-
-                                        
-               
-                                </div>
-                                
                                 </div>
                                 </div>
-
-
-                                
+                                </div>
+         
 </div>
-
-                                
-                        
                     </div>
                    <!-- #modificação 2 final //////////////////////////////////////////////////////////////////////////////////////////////////////-->
                     <div class="form-actions">
@@ -369,9 +321,6 @@
                                     style="max-width: 160px"><span class="button__icon"><i
                                             class='bx bx-plus-circle'></i></span><span
                                         class="button__text2">Adicionar</span>
-
-                                        
-                                    
                                     </button>
                                 <a href="<?php echo base_url() ?>index.php/produtos" id=""
                                     class="button btn btn-mini btn-warning"><span class="button__icon"><i
@@ -384,7 +333,6 @@
         </div>
     </div>
 </div>
-
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script type="text/javascript">
@@ -603,8 +551,4 @@ function nextImage() {
         document.getElementById('preview').src = images[currentImageIndex];
     }
 }
-
 </script>
-
-
-
