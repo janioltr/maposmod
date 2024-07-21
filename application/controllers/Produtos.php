@@ -47,23 +47,20 @@ class Produtos extends MY_Controller
         condicoes.descricaoCondicao, 
         direcao.descricaoDirecao, 
         compativeis.modeloCompativel,
-        imagens_produto.anexo,
-        imagens_produto.thumb,
-        imagens_produto.urlImagem,
-        imagens_produto.path
+        (SELECT GROUP_CONCAT(imagens_produto.anexo) FROM imagens_produto WHERE imagens_produto.produto_id = produtos.idProdutos) as imagens
     ');
     $this->db->from('produtos');
     $this->db->join('modelo', 'modelo.idModelo = produtos.idModelo');
     $this->db->join('condicoes', 'condicoes.idCondicao = produtos.idCondicao', 'left');
     $this->db->join('direcao', 'direcao.idDirecao = produtos.idDirecao', 'left');
     $this->db->join('compativeis', 'compativeis.idCompativel = produtos.idCompativel', 'left');
-    $this->db->join('imagens_produto', 'imagens_produto.produto_id = produtos.idProdutos', 'left');
     $this->db->limit($this->data['configuration']['per_page'], $this->uri->segment(3));
     $this->data['results'] = $this->db->get()->result();
 
     $this->data['view'] = 'produtos/produtos';
     return $this->layout();
 }
+
 
 
 
@@ -340,9 +337,36 @@ public function excluir()
         return $modelo->idCompativel;
     }, $modelosCompativeis);
 
+    // Excluir as imagens vinculadas ao produto e a pasta do produto
+    $imagens = $this->produtos_model->getImagensProduto($id);
+    foreach ($imagens as $imagem) {
+        $imagemPath = FCPATH . $imagem->path . DIRECTORY_SEPARATOR . $imagem->anexo;
+        $thumbPath = FCPATH . $imagem->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $imagem->thumb;
+        
+        if (file_exists($imagemPath)) {
+            unlink($imagemPath);
+        }
+        if ($imagem->thumb != null && file_exists($thumbPath)) {
+            unlink($thumbPath);
+        }
+
+        $this->produtos_model->delete('imagens_produto', 'idImagem', $imagem->idImagem);
+    }
+
+    // Excluir a pasta do produto
+    $diretorioProduto = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . 'Produto-' . $id;
+    if (is_dir($diretorioProduto . DIRECTORY_SEPARATOR . 'thumbs')) {
+        rmdir($diretorioProduto . DIRECTORY_SEPARATOR . 'thumbs');
+    }
+    if (is_dir($diretorioProduto)) {
+        rmdir($diretorioProduto);
+    }
+
     // Excluir os registros das tabelas relacionadas
     $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
     $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
+
+    // Excluir o produto
     $this->produtos_model->delete('produtos', 'idProdutos', $id);
 
     // Excluir o modelo da tabela `modelo`
@@ -356,27 +380,42 @@ public function excluir()
     // Excluir os registros da tabela `produto_compativel`
     $this->produtos_model->delete('produto_compativel', 'idProduto', $id);
 
-    // Excluir as imagens vinculadas ao produto
-    $imagens = $this->produtos_model->getImagensProduto($id);
-    foreach ($imagens as $imagem) {
-        $imagemPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . $imagem->anexo;
-        $thumbPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . $imagem->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $imagem->thumb;
-        
-        if (file_exists($imagemPath)) {
-            unlink($imagemPath);
-        }
-        if (file_exists($thumbPath)) {
-            unlink($thumbPath);
-        }
-        
-        $this->produtos_model->delete('imagens_produto', 'idImagem', $imagem->idImagem);
-    }
-
     log_info('Removeu um produto, seu modelo, modelos compatíveis e imagens. ID: ' . $id);
 
     $this->session->set_flashdata('success', 'Produto, modelos compatíveis e imagens excluídos com sucesso!');
     redirect(site_url('produtos/gerenciar/'));
 }
+
+
+
+public function excluirImgAnexo($id = null)
+    {
+        if ($id == null || !is_numeric($id)) {
+            echo json_encode(['result' => false, 'mensagem' => 'Erro ao tentar excluir anexo.']);
+        } else {
+            $this->db->where('idImagem', $id);
+            $file = $this->db->get('imagens_produto', 1)->row();
+            $idProdutos = $this->input->post('idProdutos');
+
+            unlink($file->path . DIRECTORY_SEPARATOR . $file->anexo);
+
+            if ($file->thumb != null) {
+                unlink($file->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file->thumb);
+            }
+
+            if ($this->produtos_model->delete('imagens_produto', 'idImagem', $id) == true) {
+                log_info('Removeu anexo de uma OS. ID (OS): ' . $idProdutos);
+                echo json_encode(['result' => true, 'mensagem' => 'Anexo excluído com sucesso.']);
+            } else {
+                echo json_encode(['result' => false, 'mensagem' => 'Erro ao tentar excluir anexo.']);
+            }
+        }
+    }
+
+
+
+
+
 
 
 

@@ -391,6 +391,7 @@ CREATE TABLE IF NOT EXISTS `produto_compativel` (
 -- -----------------------------------------------------
 -- Table `imagens_produto`
 -- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `imagens_produto` (
   `idImagem` INT NOT NULL AUTO_INCREMENT,
   `anexo` VARCHAR(45) NULL,

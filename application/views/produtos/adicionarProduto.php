@@ -70,7 +70,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #007bff;
+    background-color: rgba(7, 5, 6963, .5);;
     color: white;
     border: none;
     padding: 10px;
@@ -86,7 +86,7 @@
 }
 
 .image-nav-btn:hover {
-    background-color: #0056b3;
+    background-color: rgba(0,0,0,0.8);
 }
 
 #prevBtn {

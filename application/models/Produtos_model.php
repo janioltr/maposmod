@@ -128,6 +128,8 @@ class Produtos_model extends CI_Model
 }
 
 
+
+
     // segunda modificação
     public function update_modelos_compativeis($idProduto, $modelosCompativeis) {
         // Buscar os idsCompativeis atuais
