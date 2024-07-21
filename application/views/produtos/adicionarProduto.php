@@ -412,6 +412,9 @@ $(document).ready(function() {
             $('#unidade').append(new Option(data.medidas[i].descricao, data.medidas[i].sigla));
         }
     });
+    $('.money').on('focus', function() {
+            $(this).maskMoney('mask');
+    });
     $('#formProduto').validate({
         rules: {
             descricao: {
@@ -577,19 +580,3 @@ function nextImage() {
 </script>
 
 
-<script>
-    $(document).ready(function() {
-        $('.money').maskMoney({
-            prefix: '',
-            allowNegative: false,
-            thousands: '',
-            decimal: '.',
-            affixesStay: true
-        });
-
-        // Forçar a aplicação da máscara ao focar no campo (para dispositivos móveis)
-        $('.money').on('focus', function() {
-            $(this).maskMoney('mask');
-        });
-    });
-</script>
