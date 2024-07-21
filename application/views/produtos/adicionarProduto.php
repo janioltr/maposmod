@@ -127,7 +127,6 @@
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
                 <form action="<?php echo current_url(); ?>" id="formProduto" enctype="multipart/form-data" method="post" class="form-horizontal">
-                   <!-- #modificação 1 inicio  ////////////////////////////////////////////////////////////////////////////////////////////////////-->
                      <div class="span12 div-teste">
                         <div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1" >
@@ -249,8 +248,9 @@
                                                     <span class="badge">&check;</span>
                                                 </label>
                                             </div>
-                                            </div>
+                                         </div>
                                         </div>
+                                        <!-- #region -->
                                         <div >
                                         <div class="span12 control-group">
                                             <label for="unidade" class="control-label">Unidade<span class="required">*</span></label>
@@ -259,6 +259,7 @@
                                             </div>
                                         </div>
                                         </div>
+                                        <!-- #region -->
                                         <div>
                                         <div class="span12 control-group">
                                             <label for="estoque" class="control-label">Estoque<span class="required">*</span></label>
@@ -268,6 +269,7 @@
                                             </div>
                                         </div>
                                         </div>
+                                        <!-- #region -->
                                         <div>
                                         <div class="span12 control-group">
                                             <label for="estoqueMinimo" class="control-label">Estoque Mínimo</label>
@@ -277,42 +279,60 @@
                                             </div>
                                         </div>
                                         </div>
-                                        <div>
-                                    <div class="span12">
-                                        <div class="span12">
-                                            <div class="span8" >
-                                                <label for="precoCompra" class="control-label">Preço de Compra<span
-                                                        class="required">*</span></label>
-                                                <div class="controls">
-                                                    <input  id="precoCompra" class="money span12" data-affixes-stay="true"
-                                                        data-thousands="" data-decimal="." type="text" name="precoCompra"
-                                                        value="<?php echo set_value('precoCompra'); ?>" />
-                                                </div>
-                                            </div>
-                                            <div class="span4" >
+                                        <!-- #region -->
+                                         <div>
+
+                                         <div class="span8 control-group">
                                             <div class="span12" >
-                                            <label for="margemLucro" class="control-label">Margem</label>
-                                                <input class="span12" id="margemLucro" name="margemLucro" type="text"
-                                                    placeholder="%" maxlength="3" size="2" />
-                                        </div>
-                                        </div>
-                                        </div>
-                                        <strong><span style="color: red" id="errorAlert"></span><strong></strong>
-                                        <div class="control-group">
-                                            <label for="precoVenda" class="control-label">Preço de Venda<span
+                                            <label for="precoCompra" class="control-label">Preço de Compra<span
                                                     class="required">*</span></label>
                                             <div class="controls">
-                                                <input id="precoVenda" class="money span12" data-affixes-stay="true" data-thousands=""
-                                                    data-decimal="." type="text" name="precoVenda"
-                                                    value="<?php echo set_value('precoVenda'); ?>" />
+                                                <input  id="precoCompra" class="money span12" data-affixes-stay="true"
+                                                    data-thousands="" data-decimal="." type="text" name="precoCompra"
+                                                    value="<?php echo set_value('precoCompra'); ?>" />
+                                            </div>
+
                                             </div>
                                         </div>
+
+                                        <div>
+                                            <div class="span4 control-group">
+                                                <div class="span12" >
+                                                <label for="margemLucro" class="control-label">Margem</label>
+                                                    <div class="span12" >
+                                                        <input class="span12" id="margemLucro" name="margemLucro" type="text"
+                                                        placeholder="%" maxlength="3" size="2" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+
+
+                                            
+
+
+
+                                         </div>
+                                    <div>
+                                    </div>
+                                    <strong><span style="color: red" id="errorAlert"></span><strong></strong>
+                                    <div class="control-group">
+                                        <label for="precoVenda" class="control-label">Preço de Venda<span
+                                                class="required">*</span></label>
+                                        <div class="controls">
+                                            <input id="precoVenda" class="money span12" data-affixes-stay="true" data-thousands=""
+                                                data-decimal="." type="text" name="precoVenda"
+                                                value="<?php echo set_value('precoVenda'); ?>" />
+                                        </div>
+                                    </div>
                                 </div>
-                                </div>
-                                </div>
+                            </div>
+                        </div>
          
 </div>
-                    </div>
+                   
                    <!-- #modificação 2 final //////////////////////////////////////////////////////////////////////////////////////////////////////-->
                     <div class="form-actions">
                         <div class="span12">
