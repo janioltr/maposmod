@@ -112,10 +112,7 @@
 
 </style>
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskMoney/3.0.2/jquery.maskMoney.min.js" type="text/javascript"></script>
-</head>
+
 
 
 
@@ -581,18 +578,18 @@ function nextImage() {
 
 
 <script>
-        $(document).ready(function() {
-            $('.money').maskMoney({
-                prefix: '',
-                allowNegative: false,
-                thousands: '',
-                decimal: '.',
-                affixesStay: true
-            });
-
-            // Forçar a aplicação da máscara ao focar no campo (para dispositivos móveis)
-            $('.money').on('focus', function() {
-                $(this).maskMoney('mask');
-            });
+    $(document).ready(function() {
+        $('.money').maskMoney({
+            prefix: '',
+            allowNegative: false,
+            thousands: '',
+            decimal: '.',
+            affixesStay: true
         });
-    </script>
+
+        // Forçar a aplicação da máscara ao focar no campo (para dispositivos móveis)
+        $('.money').on('focus', function() {
+            $(this).maskMoney('mask');
+        });
+    });
+</script>
