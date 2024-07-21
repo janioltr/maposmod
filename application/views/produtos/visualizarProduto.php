@@ -265,17 +265,29 @@
                     <tbody>
                         <!-- #region -->
                         <div class="table table-bordered" >
-                            <div class="control-group">
-                                <label for="imgProduto" class="control-label"><span class="required"></span></label>
-                                <div class="controls">
-                                    <div class="image-slider">
-                                        <span class="prev" onclick="changeImage(-1)">❮</span>
-                                        <img id="imgProduto" src="https://encurtador.com.br/1Nwzd" alt="Imagem do Produto" />
-                                        <span class="next" onclick="changeImage(1)">❯</span>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
+                        <div class="span12 pull-left" id="divAnexos" style="margin-left: 0">
+                            <?php
+                            foreach ($imagensProduto as $imagem) {
+                                if ($imagem->thumb == null) {
+                                    $thumb = base_url() . 'assets/img/icon-file.png';
+                                    $link = base_url() . 'assets/img/icon-file.png';
+                                } else {
+                                    $thumb = $imagem->urlImagem . '/thumbs/' . $imagem->thumb;
+                                    $link = $imagem->urlImagem . '/' . $imagem->anexo;
+                                }
+                                echo '<div class="span3" style="min-height: 150px; margin-left: 0">
+                                            <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $imagem->idImagem . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                <img src="' . $thumb . '" alt="">
+                                            </a>
+                                            <span>' . $imagem->anexo . '</span>
+                                        </div>';
+                            }
+                            ?>
+                        </div>
+                            <!-- #region -->
+
+                            
+                        </div>
                         <!-- #region -->
                     </tbody>
                 </table>

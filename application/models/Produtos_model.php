@@ -58,9 +58,6 @@ class Produtos_model extends CI_Model
     return $produto;
 }
 
-
-
-    
     public function add($table, $data)
     {
         $this->db->insert($table, $data);
@@ -110,22 +107,26 @@ class Produtos_model extends CI_Model
 
     // modificações
 
-    public function imgAnexar($produtos, $anexo, $url, $thumb, $path)
-    {
-        $this->db->set('anexo', $anexo);
-        $this->db->set('url', $url);
-        $this->db->set('thumb', $thumb);
-        $this->db->set('path', $path);
-        $this->db->set('produto_id', $produtos);
+    public function imgAnexar($produtos, $anexo, $urlImagem, $thumb, $path)
+{
+    $this->db->set('anexo', $anexo);
+    $this->db->set('thumb', $thumb);
+    $this->db->set('urlImagem', $urlImagem);
+    $this->db->set('path', $path);
+    $this->db->set('produto_id', $produtos);
 
-        return $this->db->insert('imagens_produto');
-    }
+    return $this->db->insert('imagens_produto');
+}
 
-    public function getAnexos($produtos)
-    {
-        $this->db->where('produto_id', $produtos);
-        return $this->db->get('imagens_produto')->result();
-    }
+
+    
+
+    public function getImagensProduto($produtoId)
+{
+    $this->db->where('produto_id', $produtoId);
+    return $this->db->get('imagens_produto')->result();
+}
+
 
     // segunda modificação
     public function update_modelos_compativeis($idProduto, $modelosCompativeis) {

@@ -50,6 +50,7 @@
                             <input id="descricao" type="text" name="descricao" value="<?php echo $result->descricao; ?>" onChange="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                     </div>
+                    
 
                     <div class="control-group">
                         <label for="marcaProduto" class="control-label">Marca<span class="required">*</span></label>

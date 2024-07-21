@@ -127,30 +127,30 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?php echo $custom_error; ?>
-                <form action="<?php echo current_url(); ?>" id="formProduto" method="post" class="form-horizontal">
+                <form action="<?php echo current_url(); ?>" id="formProduto" enctype="multipart/form-data" method="post" class="form-horizontal">
                    <!-- #modificação 1 inicio  ////////////////////////////////////////////////////////////////////////////////////////////////////-->
                      <div class="span12 div-teste">
                         <div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1" >
-                                     <div class="control-group">
-                                            <div>
-                                            <div class="span10">
-                                                <label for="imgProduto" class="control-label"><span class="required"></span></label>
-                                                <div class="controls">
-                                                    <div class="image-slider">
-                                                        <span class="prev" onclick="changeImage(-1)">❮</span>
-                                                        <img id="imgProduto" src="https://encurtador.com.br/1Nwzd" alt="Imagem do Produto" />
-                                                        <span class="next" onclick="changeImage(1)">❯</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="span12" style="padding: 3%;" >
-                                                    <input class="span12" type="file" name="files[]" id="files" accept="image/*" multiple>
-                                                    </div>
-                                            </div>
+                                               
+                            <div class="control-group span12">
+                                <div class="span12 ">
+                                    <div class="span12" style="position: relative; text-align: center;">
+                                        <button id="prevBtn" onclick="prevImage()" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">Anterior</button>
+                                        <img id="preview" src="<?php echo base_url('assets/img/produtoIcon.jpg'); ?>" alt="Pré-visualização da Imagem" style="max-height: 300px; width: auto; margin-top: 20px;" />
+                                        <button id="nextBtn" onclick="nextImage()" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">Próxima</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="formAnexos" action="javascript:;" accept-charset="utf-8" method="post">
+                                        <div class="span10">
+                                            <input type="hidden" name="idProdutoImg" id="idProdutoImg" value="" />
+                                            <label for="userfile">Anexo</label>
+                                            <input type="file" class="span12" name="userfile[]" id="userfile" multiple="multiple" size="20" onchange="previewImages(event)" />
                                         </div>
                                     </div>
-                                
+                                </div>
+                            </div>
 
                             </div>
                             <div class="span3 div-bord" style="padding: 1%; margin-left: 1">
@@ -239,6 +239,8 @@
                                                             onChange="javascript:this.value=this.value.toUpperCase();" />
                                                     </div>
                                         </div>
+
+                                        
                                     </div>
                             </div>
 
@@ -486,6 +488,42 @@ $(document).ready(function() {
     });
 });
 
+/// anexos 
+
+$("#formAnexos").validate({
+    submitHandler: function (form) {
+        //var dados = $( form ).serialize();
+        var dados = new FormData(form);
+        $("#form-anexos").hide('1000');
+        $("#divAnexos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>index.php/produtos/imgAnexar",
+            data: dados,
+            mimeType: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: 'json',
+            success: function (data) {
+                if (data.result == true) {
+                    $("#divAnexos").load("<?php echo current_url(); ?> #divAnexos");
+                    $("#userfile").val('');
+
+                } else {
+                    $("#divAnexos").html('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> ' + data.mensagem + '</div>');
+                }
+            },
+            error: function () {
+                $("#divAnexos").html('<div class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert">×</button><strong>Atenção!</strong> Ocorreu um erro. Verifique se você anexou o(s) arquivo(s).</div>');
+            }
+        });
+        $("#form-anexos").show('1000');
+        return false;
+    }
+});
+    ///////
+
 </script>
 
 <script>
@@ -530,23 +568,42 @@ document.addEventListener('click', function(e) {
 </script>
 
 
+
+
+
 <script>
 let currentImageIndex = 0;
-const images = [
-    "https://encurtador.com.br/nAudQ",
-    "https://encurtador.com.br/1Nwzd",
-    "https://encurtador.com.br/nAudQ"
-];
+let images = [];
 
-function changeImage(direction) {
-    currentImageIndex += direction;
-    if (currentImageIndex >= images.length) {
-        currentImageIndex = 0;
-    } else if (currentImageIndex < 0) {
-        currentImageIndex = images.length - 1;
+function previewImages(event) {
+    images = [];
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            images.push(e.target.result);
+            if (i === 0) {
+                document.getElementById('preview').src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(files[i]);
     }
-    document.getElementById("imgProduto").src = images[currentImageIndex];
 }
+
+function prevImage() {
+    if (images.length > 0) {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        document.getElementById('preview').src = images[currentImageIndex];
+    }
+}
+
+function nextImage() {
+    if (images.length > 0) {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        document.getElementById('preview').src = images[currentImageIndex];
+    }
+}
+
 </script>
 
 

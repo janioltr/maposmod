@@ -111,20 +111,20 @@ public function adicionar()
     
         // Salvar os modelos compatíveis na tabela `compativeis`
         $compativelProdutos = $this->input->post('compativelProduto');
-$idCompativeis = [];
+        $idCompativeis = [];
 
-if (is_array($compativelProdutos)) {
-    foreach ($compativelProdutos as $compativelProduto) {
-        if (!empty($compativelProduto)) {
-            $compativelData = ['modeloCompativel' => $compativelProduto];
-            $this->produtos_model->add('compativeis', $compativelData);
-            $idCompativeis[] = $this->db->insert_id();
+        if (is_array($compativelProdutos)) {
+            foreach ($compativelProdutos as $compativelProduto) {
+                if (!empty($compativelProduto)) {
+                    $compativelData = ['modeloCompativel' => $compativelProduto];
+                    $this->produtos_model->add('compativeis', $compativelData);
+                    $idCompativeis[] = $this->db->insert_id();
+                }
+            }
+        } else {
+            // Tratar o caso onde $compativelProdutos não é um array
+            echo "Nenhum produto compatível foi enviado.";
         }
-    }
-} else {
-    // Tratar o caso onde $compativelProdutos não é um array
-    echo "Nenhum produto compatível foi enviado.";
-}
     
         // Preparar os dados para a tabela `produtos`
         $data = [
@@ -158,14 +158,15 @@ if (is_array($compativelProdutos)) {
             foreach ($idCompativeis as $idCompativel) {
                 $produtoCompativelData = [
                     'idProduto' => $idProduto,
-                    'idCompativel' => $idCompativel
-                    
+                    'idCompativel' => $idCompativel,
                 ];
                 $this->produtos_model->add('produto_compativel', $produtoCompativelData);
             }
 
-            
-            $this->imgAnexar($idProdutoImg);
+            // Verificar se há arquivos anexados
+            if (!empty($_FILES['userfile']['name'][0])) {
+                $this->imgAnexar($idProdutoImg);
+            }
 
             $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
             log_info('Adicionou um produto');
@@ -177,7 +178,8 @@ if (is_array($compativelProdutos)) {
 
     $this->data['view'] = 'produtos/adicionarProduto';
     return $this->layout();
-    }
+}
+
 
     public function editar()
     {
@@ -306,9 +308,13 @@ if (is_array($compativelProdutos)) {
     // Buscar modelos compatíveis
     $this->data['modelosCompativeis'] = $this->produtos_model->get_modelos_compativeis($produtoId);
 
+    // Buscar imagens do produto
+    $this->data['imagensProduto'] = $this->produtos_model->getImagensProduto($produtoId);
+
     $this->data['view'] = 'produtos/visualizarProduto';
     return $this->layout();
 }
+
 
 
     public function excluir()
@@ -386,11 +392,11 @@ if (is_array($compativelProdutos)) {
 
     // modificações
 
-    public function imgAnexar()
+    public function imgAnexar($idProduto)
 {
     $this->load->library('upload');
     $this->load->library('image_lib');
-    $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('idProdutoImg');
+    $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $idProduto;
     if (!is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
         // make directory for images and thumbs
         try {
@@ -432,6 +438,7 @@ if (is_array($compativelProdutos)) {
             $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
             $new_file_path = $upload_data['file_path'] . $new_file_name;
             rename($upload_data['full_path'], $new_file_path);
+
             if ($upload_data['is_image'] == 1) {
                 $resize_conf = [
                     'source_image' => $new_file_path,
@@ -444,16 +451,16 @@ if (is_array($compativelProdutos)) {
                     $error['resize'][] = $this->image_lib->display_errors();
                 } else {
                     $success[] = $upload_data;
-                    $this->load->model('Produtos_model');
-                    $result = $this->Produtos_model->imgAnexar($this->input->post('idProdutoImg'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('$idProdutoImg')), 'thumb_' . $new_file_name, $directory);
+                    $this->load->model('produtos_model');
+                    $result = $this->produtos_model->imgAnexar($idProduto, $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $idProduto), 'thumb_' . $new_file_name, $directory);
                     if (!$result) {
                         $error['db'][] = 'Erro ao inserir no banco de dados.';
                     }
                 }
             } else {
                 $success[] = $upload_data;
-                $this->load->model('Produtos_model');
-                $result = $this->Produtos_model->imgAnexar($this->input->post('idProdutoImg'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('idProdutoImg')), '', $directory);
+                $this->load->model('produtos_model');
+                $result = $this->produtos_model->imgAnexar($this->input->post('idProdutoImg'), $new_file_name, base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . 'produtos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'Produto-' . $this->input->post('idProdutoImg')), '', $directory);
                 if (!$result) {
                     $error['db'][] = 'Erro ao inserir no banco de dados.';
                 }
@@ -467,6 +474,7 @@ if (is_array($compativelProdutos)) {
         echo json_encode(['result' => true, 'mensagem' => 'Arquivo(s) anexado(s) com sucesso.']);
     }
 }
+
 
 
 }
