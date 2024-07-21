@@ -7,6 +7,7 @@
 .DS_Store
 .vscode
 
+/trabalho/
 /vendor/
 /application/vendor/
 
@@ -30,3 +31,4 @@ uploads
 application/.env
 assets/userImage
 assets/anexos
+
