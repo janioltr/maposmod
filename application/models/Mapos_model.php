@@ -312,24 +312,28 @@ class Mapos_model extends CI_Model
         return $this->db->get('emitente')->row();
     }
 
-    public function addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo, $carimbo)
-    {
-        $this->db->set('nome', $nome);
-        $this->db->set('cnpj', $cnpj);
-        $this->db->set('ie', $ie);
-        $this->db->set('cep', $cep);
-        $this->db->set('rua', $logradouro);
-        $this->db->set('numero', $numero);
-        $this->db->set('bairro', $bairro);
-        $this->db->set('cidade', $cidade);
-        $this->db->set('uf', $uf);
-        $this->db->set('telefone', $telefone);
-        $this->db->set('email', $email);
-        $this->db->set('url_logo', $logo);
+    public function addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo, $carimbo = null)
+{
+    $this->db->set('nome', $nome);
+    $this->db->set('cnpj', $cnpj);
+    $this->db->set('ie', $ie);
+    $this->db->set('cep', $cep);
+    $this->db->set('rua', $logradouro);
+    $this->db->set('numero', $numero);
+    $this->db->set('bairro', $bairro);
+    $this->db->set('cidade', $cidade);
+    $this->db->set('uf', $uf);
+    $this->db->set('telefone', $telefone);
+    $this->db->set('email', $email);
+    $this->db->set('url_logo', $logo);
+    
+    if ($carimbo !== null) {
         $this->db->set('url_carimbo', $carimbo);
-
-        return $this->db->insert('emitente');
     }
+
+    return $this->db->insert('emitente');
+}
+
 
     public function editEmitente($id, $nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email)
     {
