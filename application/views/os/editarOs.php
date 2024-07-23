@@ -498,7 +498,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="4" style="text-align: right"><strong>Total:</strong></td>
+                                                <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
                                                 <td>
                                                     <div align="center"><strong>R$
                                                             <?php echo number_format($totals, 2, ',', '.'); ?><input
